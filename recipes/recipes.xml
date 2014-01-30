@@ -524,7 +524,10 @@
         <carb-type>POTATO</carb-type>
         <recipe-book>None</recipe-book>
         <page-number>0</page-number>
-        <ingredients/>
+        <ingredients>
+            <ingredient>Baking potatoes</ingredient>
+            <ingredient>Salad stuff</ingredient>
+        </ingredients>
     </recipe>
     <recipe>
         <name>Chicken and butternut squash tagine</name>
