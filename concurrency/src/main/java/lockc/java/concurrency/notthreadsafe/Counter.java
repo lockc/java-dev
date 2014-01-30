@@ -5,6 +5,19 @@ import java.util.concurrent.Executors;
 
 import javax.annotation.concurrent.NotThreadSafe;
 
+/**
+ * Race condition exists getting the counter and adding 1.  thread A increments counter 
+ * and is currently at 7 at same time thread B increments counter which is sees as 7 
+ * thread A adds one and thread B adds one, they both set to 8.
+ * 
+ * Another race condition thread A is incrementing the counter but thread B calls getCounter
+ * as same time, thread B gets stale data as thread A is in the middle of updating the counter.
+ * 
+ * counter = counter + 1 is not atomic!
+ * 
+ * @author lockc
+ *
+ */
 @NotThreadSafe
 public class Counter {
 
@@ -14,11 +27,8 @@ public class Counter {
 		return counter;
 	}
 
-	public void setCounter(int counter) throws InterruptedException {
-		if(counter == 50 ) {
-			Thread.sleep(1000);
-		}
-		this.counter = counter;
+	public void incrementCounter() throws InterruptedException {
+		counter = counter + 1;
 	}
 	
 	
@@ -36,7 +46,7 @@ public class Counter {
 				public void run() {
 					while(counter.getCounter() < 100) {
 						try {
-							counter.setCounter(counter.getCounter() + 1);
+							counter.incrementCounter();
 						} catch (InterruptedException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -47,7 +57,7 @@ public class Counter {
 			});
 		}
 		
-		
+		service.shutdown();
 	}
 
 }

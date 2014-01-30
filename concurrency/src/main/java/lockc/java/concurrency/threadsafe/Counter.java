@@ -6,9 +6,22 @@ import java.util.concurrent.Executors;
 import javax.annotation.concurrent.GuardedBy;
 import javax.annotation.concurrent.ThreadSafe;
 
+/**
+ * An example of an intrinsic lock, using the 'synchronized' statement uses the 
+ * object itself as the lock.  This doesn't block access to the object it only stop 
+ * other threads acquiring the same lock.   
+ * 
+ * @author lockc
+ *
+ */
 @ThreadSafe
 public class Counter {
 
+	/**
+	 * The volatile statement ensures the latest write to counter will be visible to 
+	 * all calling threads, without this writes from one thread are not guaranteed
+	 * to be visible to other consuming threads
+	 */
 	@GuardedBy("this")
 	private volatile int counter;
 
@@ -16,11 +29,8 @@ public class Counter {
 		return counter;
 	}
 
-	public synchronized void setCounter(int counter) throws InterruptedException {
-		if(counter == 50 ) {
-			Thread.sleep(1000);
-		}
-		this.counter = counter;
+	public synchronized void incrementCounter() throws InterruptedException {
+		counter = counter + 1;
 	}
 	
 	
@@ -35,19 +45,20 @@ public class Counter {
 		for(int x = 0; x < 10; x++) {
 			service.execute(new Runnable() {
 				public void run() {
-					while(counter.getCounter() < 100) {
+					while(counter.getCounter() < 1000) {
 						try {
-							counter.setCounter(counter.getCounter() + 1);
+							counter.incrementCounter();
+							System.out.println(this.hashCode() + " " + counter.getCounter());
 						} catch (InterruptedException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-						System.out.println(counter.getCounter());
+						
 					}
 				}
 			});
 		}
 		
-		
+		service.shutdown();
 	}
 }
