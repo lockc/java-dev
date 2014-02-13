@@ -45,7 +45,7 @@ public class Counter {
 		for(int x = 0; x < 10; x++) {
 			service.execute(new Runnable() {
 				public void run() {
-					while(counter.getCounter() < 1000) {
+					while(counter.getCounter() < 200) {
 						try {
 							counter.incrementCounter();
 							System.out.println(this.hashCode() + " " + counter.getCounter());
