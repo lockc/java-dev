@@ -42,10 +42,9 @@ public class HttpRequest {
 
 	public static HttpRequest parse(String requestData) {
 		
-		System.out.println(requestData);
+		
 		
 		String[] requestLines = requestData.split("\r\n");
-		
 		String requestLine = requestLines[0];  
 		String[] requestLineSections = requestLine.split(" ");
 		String method = requestLineSections[0];

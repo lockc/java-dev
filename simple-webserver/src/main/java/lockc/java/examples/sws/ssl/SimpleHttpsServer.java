@@ -1,22 +1,23 @@
-package lockc.java.examples.sws;
+package lockc.java.examples.sws.ssl;
 
 import java.io.DataInputStream;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class SimpleHttpServer {
+import lockc.java.examples.sws.HttpRequest;
 
-	private final ServerSocketListener serverSocketListener;
+public class SimpleHttpsServer {
+
+	private final SslServerSocketListener serverSocketListener;
 	private final ExecutorService workerPool;
 	private ExecutorService internalPool = Executors.newFixedThreadPool(2);
 	private volatile boolean shutdownHook = false;
 	
-	public SimpleHttpServer(int port, int maxQueueSize, int poolsize) throws IOException {
-		serverSocketListener = new ServerSocketListener(port, maxQueueSize);
+	public SimpleHttpsServer(int port, int maxQueueSize, int poolsize) throws Exception {
+		serverSocketListener = new SslServerSocketListener(port, maxQueueSize);
 		workerPool = Executors.newFixedThreadPool(poolsize);
 	}
 	
