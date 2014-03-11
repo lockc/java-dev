@@ -6,6 +6,8 @@ package recipes.app;
 import java.util.Properties;
 
 import org.apache.log4j.PropertyConfigurator;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
 import recipes.gui.RecipesWindow;
 
 /**
@@ -21,9 +23,10 @@ public class RecipeApp {
 		properties = new Properties();
 		properties.load(RecipeApp.class.getClassLoader().getResourceAsStream("settings.properties"));
 		PropertyConfigurator.configure("src/main/resources/settings.properties");
-				
-		RecipesWindow.launch();
-				
+		
+		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("application-context.xml");
+		
+		
 	}
 
 }

@@ -7,58 +7,42 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-/**
- * @author lockc
- *
- */
 @SuppressWarnings("serial")
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-@Table(name="ingredients")
-public class Ingredient implements Serializable {
+@Table(name="recipe_books")
+public class RecipeBook implements Serializable {
 
 	@Id
-	@Column(name="ID", unique=true, nullable=false)
 	@GeneratedValue
+	@Column(name="ID", nullable=false, unique=true)
+	@XmlElement(required = true)
 	private int id;
 	
-	@Column(name="RECIPE_ID", unique=false, nullable=false)
-	private int recipeId;
-	
-	@Column(name="DESC", unique=false, nullable=false)
+	@Column(name="NAME", nullable=false, unique=true)
 	@XmlElement(required = true)
-	private String description;
-		
+	private String name;
+	
+	
 	public int getId() {
 		return id;
 	}
-
+	
 	public void setId(int id) {
 		this.id = id;
 	}
-
-	public int getRecipeId() {
-		return recipeId;
+	
+	public String getName() {
+		return name;
 	}
 	
-	public void setRecipeId(int recipeId) {
-		this.recipeId = recipeId;
+	public void setName(String name) {
+		this.name = name;
 	}
-	
-	public String getDescription() {
-		return description;
-	}
-	
-	public void setDescription(String description) {
-		this.description = description;
-	}
-	
-	
 }

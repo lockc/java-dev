@@ -4,7 +4,6 @@ import java.awt.EventQueue;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.FileOutputStream;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,8 +15,6 @@ import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JPanel;
 
-import recipes.app.RecipeSelector;
-import recipes.app.RecipeSelectorImpl;
 import recipes.dao.RecipeDao;
 import recipes.dao.RecipeXmlDao;
 import recipes.domain.Recipe;
@@ -27,7 +24,8 @@ import java.awt.Dimension;
 
 public class RecipesWindow {
 
-	private static RecipesWindow window;
+	private RecipeDao dao;
+	
 	private JFrame frame;
 	private JList listAvailable;
 	private JList listSelected;
@@ -36,44 +34,29 @@ public class RecipesWindow {
 	
 	private List<Recipe> allRecipes;
 	private List<Recipe> selectedRecipes;
+
+	private RecipesWindow(RecipeDao dao) throws Exception {
+		this.dao = dao;
+		allRecipes = dao.getAllRecipes();
+		selectedRecipes = new ArrayList<Recipe>();
+	}
 	
-	/**
-	 * Launch the application.
-	 * @throws InvocationTargetException 
-	 * @throws InterruptedException 
-	 */
-	public static RecipesWindow launch() throws InterruptedException, InvocationTargetException {
+	public static RecipesWindow launch(RecipeDao dao) throws Exception {
+		final RecipesWindow window = new RecipesWindow(dao);
+		
 		EventQueue.invokeAndWait(new Runnable() {
 			public void run() {
 				try {
-					RecipesWindow window = new RecipesWindow();
+					window.initialize();
+					window.populateAvailable();
 					window.frame.setVisible(true);
-					RecipesWindow.window = window;
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		});
-		return RecipesWindow.window;
-	}
-
-	/**
-	 * Create the application.
-	 * @throws Exception 
-	 */
-	public RecipesWindow() throws Exception {
-		initialize();
 		
-		RecipeDao dao = new RecipeXmlDao();
-		allRecipes = dao.getAllRecipes();
-		
-		List<String> availables = new ArrayList<String>();
-		for(Recipe recipe : allRecipes) {
-			availables.add(recipe.getName());
-		}
-		populateAvailable(availables.toArray(new String[0]));
-		
-		selectedRecipes = new ArrayList<Recipe>();
+		return window;
 	}
 	
 
@@ -122,11 +105,11 @@ public class RecipesWindow {
 				}
 			}
 		});
-		btnAddMeal.setBounds(320, 126, 49, 23);
+		btnAddMeal.setBounds(320, 210, 62, 23);
 		panel.add(btnAddMeal);
 		
 		JButton btnRemoveMeal = new JButton("<<");
-		btnRemoveMeal.setBounds(320, 180, 49, 23);
+		btnRemoveMeal.setBounds(320, 245, 62, 23);
 		panel.add(btnRemoveMeal);
 		btnRemoveMeal.addMouseListener(new MouseAdapter() {
 			@Override
@@ -173,18 +156,29 @@ public class RecipesWindow {
 	}
 	
 	private void createShoppingList() throws Exception {
-		RecipeSelector selector = new RecipeSelectorImpl();
-		String list = selector.creatShoppingList(selectedRecipes);
+		
+		StringBuilder builder = new StringBuilder();
+		for(Recipe recipe : selectedRecipes) {
+			builder.append(recipe.toShoppingListItem());
+		}
+		String list = builder.toString();
 		
 		String filePath = System.getProperty("user.dir") + System.getProperty("file.separator") + "ShoppingList.txt";
 		System.out.println(filePath);
-		FileOutputStream fos = new FileOutputStream(filePath);
-		fos.write(list.getBytes());
-		fos.write(0);
-		fos.flush();
-		fos.close();
 		
+		FileOutputStream fos = null;
+		try {
+			fos = new FileOutputStream(filePath);
+			fos.write(list.getBytes());
+			fos.write(0);
+			fos.flush();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			fos.close();
+		}
 	}
+	
 	
 	private Recipe findRecipe(String name) {
 		
@@ -197,9 +191,9 @@ public class RecipesWindow {
 		return null;
 	}
 	
-	public void populateAvailable(String[] availables) {
-		for(String available : availables) {
-			resultListAvailable.addElement(available);
+	public void populateAvailable() {
+		for(Recipe available : allRecipes) {
+			resultListAvailable.addElement(available.getName());
 		}
 		frame.getContentPane().validate();
 	}

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.springframework.org/schema/beans" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                           http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd
+                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="org.sqlite.JDBC"/>
+		<property name="url" value="jdbc:sqlite:/home/lockc/git/java-dev/recipes/recipes.db"/>
+	</bean>
+
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean" >
+		<property name="dataSource" ref="dataSource"/>
+		<property name="packagesToScan" value="recipes.domain"/>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">recipes.dao.SQLiteDialect</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.format_sql">true</prop>
+				<prop key="hibernate.current_session_context_class">thread</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<bean id="dao" class="recipes.dao.RecipeSqliteDao">
+		<constructor-arg index="0" ref="sessionFactory"/>
+	</bean>
+	
+	<bean id="recipesWindow" class="recipes.gui.RecipesWindow" factory-method="launch">
+		<constructor-arg index="0" ref="dao"/>
+	</bean>
+	
+	
+</beans>

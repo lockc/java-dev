@@ -2,7 +2,7 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   	
   	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.betfair.automation.test.utils</groupId>
+	<groupId>lockc.projects</groupId>
 	<artifactId>recipes</artifactId>
 	<packaging>jar</packaging>
 	<version>1.0-SNAPSHOT</version>
@@ -11,22 +11,58 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<java.version>1.6</java.version>
+		
+		<java.version>1.7</java.version>
         <onejar.version>1.4.4</onejar.version>
+        <spring.version>3.2.7.RELEASE</spring.version>
+        <hibernate.version>4.3.2.Final</hibernate.version>
+        <sqlite.version>3.7.2</sqlite.version>
+        <log4j.version>1.2.14</log4j.version>
 	</properties>
 	
 
 	<dependencies>
+		
 		<dependency>
-  			<groupId>junit</groupId>
-  			<artifactId>junit</artifactId>
-  			<version>4.0</version>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>${spring.version}</version>
 		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.xerial</groupId>
+			<artifactId>sqlite-jdbc</artifactId>
+			<version>${sqlite.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>${hibernate.version}</version>
+		</dependency>
+		
+		<dependency>
+		  	<groupId>org.hibernate</groupId>
+	      	<artifactId>hibernate-annotations</artifactId>
+	      	<version>3.5.6-Final</version>
+	    </dependency>
 		
 		<dependency>
 		  <groupId>log4j</groupId>
 		  <artifactId>log4j</artifactId>
-		  <version>1.2.9</version>
+		  <version>${log4j.version}</version>
 		</dependency>
 		
 	</dependencies>

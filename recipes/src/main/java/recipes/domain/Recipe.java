@@ -1,11 +1,20 @@
-/**
- * 
- */
 package recipes.domain;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -16,183 +25,123 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author lockc
  *
  */
+@SuppressWarnings("serial")
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Recipe {
+@Entity
+@Table(name="recipes")
+public class Recipe implements Serializable {
 
+	@Id
+	@GeneratedValue
+	@Column(name="ID", unique=true, nullable=false)
 	@XmlElement(name = "recipe-id", required = true)
 	private int recipeId;
+	
+	@Column(name="NAME", unique=false, nullable=false)
 	@XmlElement(required = true)
 	private String name;
+	
+	@Transient
 	@XmlElement(required = true)
 	private RecipeCategory category;
+	
+	@Transient
 	@XmlElement(name = "carb-type", required = true)
 	private CarbType carbType;
-	@XmlElement(name = "recipe-book", required = true)
-	private String recipeBook;
+		
+	// Many recipes can have the same recipe book
+	@ManyToOne(fetch=FetchType.EAGER, targetEntity=RecipeBook.class)  
+	@JoinColumn(name="RECIPE_BOOK_ID")
+	@XmlElement(required = true)
+	private RecipeBook recipeBook;
+	
+	@Column(name="PAGE_NO", unique=true, nullable=false)
 	@XmlElement(name = "page-number", required = true)
 	private int pageNumber;
-//	@XmlElementWrapper(name="ingredients")
-//    @XmlElement(name="ingredient")
-//	private List<Ingredient> ingredients;
-	
+
+	@OneToMany(fetch=FetchType.EAGER, targetEntity=Ingredient.class)
+	//@JoinTable(name="ingredients", joinColumns = {@JoinColumn(name="RECIPE_ID")})
+	@JoinColumn(name="RECIPE_ID")
 	@XmlElementWrapper(name="ingredients")
     @XmlElement(name="ingredient")
-	private List<String> ingredients;
+	private List<Ingredient> ingredients;
 	
 	
 	
 	
 	public Recipe() {
 		super();
-//		ingredients = new ArrayList<Ingredient>();
-		ingredients = new ArrayList<String>();
+		ingredients = new ArrayList<Ingredient>();
 	}
 
 
 
 
 
-	public Recipe(String name, RecipeCategory category, CarbType carbType, String recipeBook, int pageNumber, Ingredients ingredients) {
+	public Recipe(String name, RecipeCategory category, CarbType carbType, RecipeBook recipeBook, int pageNumber, Ingredients ingredients) {
 		super();
 		this.name = name;
 		this.category = category;
 		this.carbType = carbType;
 		this.recipeBook = recipeBook;
 		this.pageNumber = pageNumber;
-		
-//		this.ingredients = ingredients;
 	}
 	
 	
-	
-	
-	
-	/**
-	 * @return the recipeId
-	 */
+
 	public int getRecipeId() {
 		return recipeId;
 	}
 
-
-	/**
-	 * @param recipeId the recipeId to set
-	 */
 	public void setRecipeId(int recipeId) {
 		this.recipeId = recipeId;
 	}
 
-//	/**
-//	 * @return the ingredients
-//	 */
-//	public List<Ingredient> getIngredients() {
-//		return ingredients;
-//	}
-//
-//
-//	/**
-//	 * @param ingredients the ingredients to set
-//	 */
-//	public void setIngredients(List<Ingredient> ingredients) {
-//		this.ingredients = ingredients;
-//	}
-
-	/**
-	 * @return the ingredients
-	 */
-	public List<String> getIngredients() {
+	public List<Ingredient> getIngredients() {
 		return ingredients;
 	}
 
-
-	/**
-	 * @param ingredients the ingredients to set
-	 */
-	public void setIngredients(List<String> ingredients) {
+	public void setIngredients(List<Ingredient> ingredients) {
 		this.ingredients = ingredients;
 	}
 
-	/**
-	 * @return the carbType
-	 */
 	public CarbType getCarbType() {
 		return carbType;
 	}
 
-
-	/**
-	 * @param carbType the carbType to set
-	 */
 	public void setCarbType(CarbType carbType) {
 		this.carbType = carbType;
 	}
 
-	
-	/**
-	 * @return the name
-	 */
 	public String getName() {
 		return name;
 	}
-	/**
-	 * @param name the name to set
-	 */
+
 	public void setName(String name) {
 		this.name = name;
 	}
-	/**
-	 * @return the category
-	 */
+
 	public RecipeCategory getCategory() {
 		return category;
 	}
-	/**
-	 * @param category the category to set
-	 */
+
 	public void setCategory(RecipeCategory category) {
 		this.category = category;
 	}
 
-
-
-
-	/**
-	 * @return the recipeBook
-	 */
-	public String getRecipeBook() {
+	public RecipeBook getRecipeBook() {
 		return recipeBook;
 	}
 
-
-
-
-
-	/**
-	 * @param recipeBook the recipeBook to set
-	 */
-	public void setRecipeBook(String recipeBook) {
+	public void setRecipeBook(RecipeBook recipeBook) {
 		this.recipeBook = recipeBook;
 	}
 
-
-
-
-
-	/**
-	 * @return the pageNumber
-	 */
 	public int getPageNumber() {
 		return pageNumber;
 	}
 
-
-
-
-
-	/**
-	 * @param pageNumber the pageNumber to set
-	 */
 	public void setPageNumber(int pageNumber) {
 		this.pageNumber = pageNumber;
 	}
@@ -208,15 +157,7 @@ public class Recipe {
 	public String toString() {
 		return String.format("Name: %s.", this.getName());
 	}
-	
-	
-	
-	public String toSQL() {
-		String sql = String.format("insert into recipes(name, category, carb_type) values('%s', '%s', '%s');", this.name, this.category, this.carbType);
-		System.out.println(sql);
-		return sql;
-	}
-	
+
 	public String toShoppingListItem() {
 		
 		StringBuilder builder = new StringBuilder();
@@ -224,13 +165,9 @@ public class Recipe {
 		builder.append("---------------------------------------").append("\r\n");
 		builder.append(this.getName()).append(".  (").append(this.getRecipeBook()).append(" p").append(this.getPageNumber()).append(").\r\n");
 		builder.append("---------------------------------------").append("\r\n");
-		
-//		for(Ingredient ingredient : this.getIngredients()) {
-//			builder.append(ingredient.getDescription()).append("\n");
-//		}
-		
-		for(String ingredient : this.getIngredients()) {
-			builder.append(ingredient).append("\r\n");
+				
+		for(Ingredient ingredient : this.getIngredients()) {
+			builder.append(ingredient.getDescription()).append("\r\n");
 		}
 		
 		return builder.toString();
