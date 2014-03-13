@@ -8,10 +8,15 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.xml.bind.JAXBException;
 
 import recipes.domain.Ingredient;
 import recipes.domain.Recipe;
+import recipes.domain.RecipeBook;
 import recipes.domain.Recipes;
 import recipes.serialisation.XmlSerialiser;
 
@@ -51,13 +56,25 @@ public class RecipeXmlDao implements RecipeDao {
 	 * @see recipe.dao.RecipeDao#getAllRecipes()
 	 */
 	@Override
-	public List<Recipe> getAllRecipes() throws Exception  {
+	public List<Recipe> getAllRecipes()  {
 		
-		loadXml(System.getProperty("user.dir") + System.getProperty("file.separator") + "recipes.xml");
+		try {
+			loadXml(System.getProperty("user.dir") + System.getProperty("file.separator") + "recipes.xml");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return new ArrayList<Recipe>();
+		}
 		
-		Recipes recipes = (Recipes) new XmlSerialiser().deserialise(xml, Recipes.class);
+		Recipes recipes = null;
+		try {
+			recipes = (Recipes) new XmlSerialiser().deserialise(xml, Recipes.class);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
 		
-		return recipes.getRecipes();
+		return recipes != null ? recipes.getRecipes() : new ArrayList<Recipe>();
 	}
 	
 	/*
@@ -66,6 +83,34 @@ public class RecipeXmlDao implements RecipeDao {
 	 */
 	public List<Ingredient> getIngredients(int recipe_id) {
 		return null;
+	}
+
+
+	@Override
+	public void addRecipe(Recipe recipe) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public List<RecipeBook> getRecipeBooks() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public RecipeBook getRecipeBook(String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public void addRecipeBook(RecipeBook recipeBook) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

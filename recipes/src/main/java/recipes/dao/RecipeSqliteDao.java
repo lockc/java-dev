@@ -13,6 +13,7 @@ import org.hibernate.SessionFactory;
 
 import recipes.domain.Ingredient;
 import recipes.domain.Recipe;
+import recipes.domain.RecipeBook;
 
 /**
  * @author lockc
@@ -52,6 +53,22 @@ public class RecipeSqliteDao implements RecipeDao {
 		return recipes;
 	}
 	
+	@Override
+	public void addRecipe(Recipe recipe) {
+		
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			session .beginTransaction();
+			session.save(recipe);
+			session.getTransaction().commit();
+		} finally {
+			session.close();
+		}
+	}
+	
+	
+	
 	/*
 	 * (non-Javadoc)
 	 * @see recipes.dao.RecipeDao#getIngredients(int)
@@ -64,5 +81,61 @@ public class RecipeSqliteDao implements RecipeDao {
 		return ingredients;
 
 }
+
+
+
+
+	@Override
+	public List<RecipeBook> getRecipeBooks() {
+		List<RecipeBook> recipesBooks = new ArrayList<RecipeBook>();
+
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			Query query = session.createQuery("from RecipeBook");
+			recipesBooks = query.list();
+		} finally {
+			session.close();
+		}
+		return recipesBooks;
+	}
+
+
+
+
+	@Override
+	public RecipeBook getRecipeBook(String name) {
+		RecipeBook recipeBook = null;
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			Query query = session.createQuery("from RecipeBook where NAME = :name");
+			query.setParameter("name", name);
+			recipeBook = (RecipeBook) query.uniqueResult();
+		} finally {
+			session.close();
+		}
+		
+		
+		return recipeBook;
+	}
+
+	@Override
+	public void addRecipeBook(RecipeBook recipeBook) {
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			session .beginTransaction();
+			session.save(recipeBook);
+			session.getTransaction().commit();
+		} finally {
+			session.close();
+		}	
+	}
+
+
+
+
+	
 
 }

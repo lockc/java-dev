@@ -4,22 +4,24 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
+
 
 /**
  * @author lockc
@@ -49,9 +51,12 @@ public class Recipe implements Serializable {
 	@Transient
 	@XmlElement(name = "carb-type", required = true)
 	private CarbType carbType;
-		
-	// Many recipes can have the same recipe book
-	@ManyToOne(fetch=FetchType.EAGER, targetEntity=RecipeBook.class)  
+	
+	/*
+	 * Many recipes can have the same recipe book.  This relationship is unidirectional
+	 * in that the RecipeBook class doesn't have a list of recipes.
+	 */
+	@ManyToOne(fetch=FetchType.EAGER)  
 	@JoinColumn(name="RECIPE_BOOK_ID")
 	@XmlElement(required = true)
 	private RecipeBook recipeBook;
@@ -60,8 +65,14 @@ public class Recipe implements Serializable {
 	@XmlElement(name = "page-number", required = true)
 	private int pageNumber;
 
-	@OneToMany(fetch=FetchType.EAGER, targetEntity=Ingredient.class)
-	//@JoinTable(name="ingredients", joinColumns = {@JoinColumn(name="RECIPE_ID")})
+	/**
+	 * N.B. 
+	 * 
+	 * CascadeType.ALL ensures that the List of ingredients are persisted with the
+	 * recipe.  Without this Transient object errors are thrown because the list isn't
+	 * a persisted object.
+	 */
+	@OneToMany(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
 	@JoinColumn(name="RECIPE_ID")
 	@XmlElementWrapper(name="ingredients")
     @XmlElement(name="ingredient")
