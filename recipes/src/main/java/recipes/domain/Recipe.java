@@ -15,12 +15,15 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+import recipes.serialisation.IngredientAdaptor;
+import recipes.serialisation.RecipeBookAdaptor;
 
 
 /**
@@ -56,16 +59,17 @@ public class Recipe implements Serializable {
 	 * Many recipes can have the same recipe book.  This relationship is unidirectional
 	 * in that the RecipeBook class doesn't have a list of recipes.
 	 */
-	@ManyToOne(fetch=FetchType.EAGER)  
+	@ManyToOne(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
 	@JoinColumn(name="RECIPE_BOOK_ID")
-	@XmlElement(required = true)
+	@XmlJavaTypeAdapter(value=RecipeBookAdaptor.class)
+	@XmlElement(name = "recipe-book")
 	private RecipeBook recipeBook;
 	
 	@Column(name="PAGE_NO", unique=true, nullable=false)
 	@XmlElement(name = "page-number", required = true)
 	private int pageNumber;
 
-	/**
+	/*
 	 * N.B. 
 	 * 
 	 * CascadeType.ALL ensures that the List of ingredients are persisted with the
@@ -76,8 +80,8 @@ public class Recipe implements Serializable {
 	@JoinColumn(name="RECIPE_ID")
 	@XmlElementWrapper(name="ingredients")
     @XmlElement(name="ingredient")
+	@XmlJavaTypeAdapter(value=IngredientAdaptor.class)
 	private List<Ingredient> ingredients;
-	
 	
 	
 	
@@ -159,15 +163,38 @@ public class Recipe implements Serializable {
 
 
 
-
-
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
 	@Override
 	public String toString() {
-		return String.format("Name: %s.", this.getName());
+		return getName();
 	}
+	
+	@Override
+	public boolean equals(Object object) {
+		
+		if(object == this) return true;
+		
+		if(!(object instanceof Recipe)) return false;
+		
+		Recipe recipe = (Recipe) object;
+		
+		if(recipe.getRecipeId() != this.getRecipeId()) return false;
+		if(!recipe.getName().equals(this.getName())) return false;
+		if(recipe.getPageNumber() != this.getPageNumber()) return false;
+		if(!recipe.getRecipeBook().equals(this.getRecipeBook())) return false;
+		
+		return true;
+	}
+	
+	@Override
+	public int hashCode() {
+		int result = 17;
+		result = 31 * result + recipeId;
+		result = 31 * result + pageNumber;
+		result = 31 * result + recipeBook.hashCode();
+		result = 31 * result + name.hashCode();
+		return result;
+	}
+	
 
 	public String toShoppingListItem() {
 		

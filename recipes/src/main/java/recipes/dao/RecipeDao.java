@@ -21,10 +21,12 @@ public interface RecipeDao {
 	
 	RecipeBook getRecipeBook(String name);
 	
+	Recipe getRecipe(long recipeId);
+	
 	void addRecipeBook(RecipeBook recipeBook);
 	
 	void addRecipe(Recipe recipe);
 	
+	void updateRecipe(Recipe recipe);
 	
-	List<Ingredient> getIngredients(int recipe_id);
 }

@@ -77,15 +77,6 @@ public class RecipeXmlDao implements RecipeDao {
 		return recipes != null ? recipes.getRecipes() : new ArrayList<Recipe>();
 	}
 	
-	/*
-	 * (non-Javadoc)
-	 * @see recipes.dao.RecipeDao#getIngredients(int)
-	 */
-	public List<Ingredient> getIngredients(int recipe_id) {
-		return null;
-	}
-
-
 	@Override
 	public void addRecipe(Recipe recipe) {
 		// TODO Auto-generated method stub
@@ -109,6 +100,20 @@ public class RecipeXmlDao implements RecipeDao {
 
 	@Override
 	public void addRecipeBook(RecipeBook recipeBook) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public Recipe getRecipe(long recipeId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public void updateRecipe(Recipe recipe) {
 		// TODO Auto-generated method stub
 		
 	}

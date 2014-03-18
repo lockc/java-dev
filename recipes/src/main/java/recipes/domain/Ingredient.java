@@ -7,11 +7,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * @author lockc
@@ -24,16 +25,18 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name="ingredients")
 public class Ingredient implements Serializable {
 
+	@XmlTransient
 	@Id
 	@Column(name="ID", unique=true, nullable=false)
 	@GeneratedValue
 	private int id;
 	
+	@XmlTransient
 	@Column(name="RECIPE_ID", unique=false, nullable=false)
 	private int recipeId;
 	
 	@Column(name="DESC", unique=false, nullable=false)
-	@XmlElement(required = true)
+	@XmlElement
 	private String description;
 		
 	public int getId() {
@@ -60,5 +63,8 @@ public class Ingredient implements Serializable {
 		this.description = description;
 	}
 	
-	
+	@Override
+	public String toString() {
+		return getDescription();
+	}
 }

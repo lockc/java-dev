@@ -15,11 +15,13 @@ import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JPanel;
 
+import recipes.app.RecipeEditorDelegate;
 import recipes.dao.RecipeDao;
-import recipes.dao.RecipeXmlDao;
 import recipes.domain.Recipe;
 
 import java.awt.Dimension;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 
 public class RecipesWindow {
@@ -27,20 +29,31 @@ public class RecipesWindow {
 	private RecipeDao dao;
 	
 	private JFrame frame;
-	private JList listAvailable;
-	private JList listSelected;
-	private DefaultListModel resultListSelected = new DefaultListModel();
-	private DefaultListModel resultListAvailable = new DefaultListModel();
+	private JList<Recipe> listAvailable;
+	private JList<Recipe> listSelected;
+	private DefaultListModel<Recipe> resultListSelected = new DefaultListModel<Recipe>();
+	private DefaultListModel<Recipe> resultListAvailable = new DefaultListModel<Recipe>();
 	
 	private List<Recipe> allRecipes;
 	private List<Recipe> selectedRecipes;
 
+	public RecipesWindow() {
+		initialize();
+	}
+	
+	/**
+	 * @wbp.parser.entryPoint
+	 */
 	private RecipesWindow(RecipeDao dao) throws Exception {
+		this();
 		this.dao = dao;
 		allRecipes = dao.getAllRecipes();
 		selectedRecipes = new ArrayList<Recipe>();
 	}
 	
+	/**
+	 * @wbp.parser.entryPoint
+	 */
 	public static RecipesWindow launch(RecipeDao dao) throws Exception {
 		final RecipesWindow window = new RecipesWindow(dao);
 		
@@ -70,7 +83,7 @@ public class RecipesWindow {
 		frame.getContentPane().setLayout(null);
 		
 		JPanel panel = new JPanel();
-		panel.setPreferredSize(new Dimension(16, 10));
+		panel.setPreferredSize(new Dimension(733, 542));
 		panel.setBorder(null);
 		panel.setBounds(0, 11, 704, 475);
 		frame.getContentPane().add(panel);
@@ -99,7 +112,7 @@ public class RecipesWindow {
 			public void mouseClicked(MouseEvent e) {
 				Object[] values = listAvailable.getSelectedValues();
 				for(Object value : values) {
-					resultListSelected.addElement(String.valueOf(value));
+					resultListSelected.addElement((Recipe)value);
 					resultListAvailable.remove(resultListAvailable.indexOf(value));
 					selectedRecipes.add(findRecipe(String.valueOf(value)));
 				}
@@ -117,7 +130,7 @@ public class RecipesWindow {
 				
 				Object[] values = listSelected.getSelectedValues();
 				for(Object value : values) {
-					resultListAvailable.addElement(String.valueOf(value));
+					resultListAvailable.addElement((Recipe)value);
 					resultListSelected.remove(resultListSelected.indexOf(value));
 					selectedRecipes.remove(findRecipe(String.valueOf(value)));
 				}
@@ -152,6 +165,29 @@ public class RecipesWindow {
 		
 		btnNewButton.setBounds(425, 452, 258, 23);
 		panel.add(btnNewButton);
+		
+		JButton btnAddRecipe = new JButton("Add");
+		btnAddRecipe.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+				RecipeEditor editor = RecipeEditor.newInstance(new RecipeEditorDelegate(dao, null));
+				editor.show();
+				
+			}
+		});
+		btnAddRecipe.setBounds(31, 451, 117, 25);
+		panel.add(btnAddRecipe);
+		
+		JButton btnEdit = new JButton("Edit");
+		btnEdit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Recipe recipe = (Recipe) listAvailable.getSelectedValues()[0];
+				RecipeEditor editor = RecipeEditor.newInstance(new RecipeEditorDelegate(dao, recipe));
+				editor.show();
+			}
+		});
+		btnEdit.setBounds(172, 451, 117, 25);
+		panel.add(btnEdit);
 		
 	}
 	
@@ -193,7 +229,7 @@ public class RecipesWindow {
 	
 	public void populateAvailable() {
 		for(Recipe available : allRecipes) {
-			resultListAvailable.addElement(available.getName());
+			resultListAvailable.addElement(available);
 		}
 		frame.getContentPane().validate();
 	}

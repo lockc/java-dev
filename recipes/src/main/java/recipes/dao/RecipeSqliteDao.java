@@ -32,9 +32,6 @@ public class RecipeSqliteDao implements RecipeDao {
 
 
 
-	/* (non-Javadoc)
-	 * @see recipe.dao.RecipeDao#getAllRecipes()
-	 */
 	@Override
 	public List<Recipe> getAllRecipes()  {
 		
@@ -49,8 +46,23 @@ public class RecipeSqliteDao implements RecipeDao {
 			session.close();
 		}
 		
-		
 		return recipes;
+	}
+	
+	@Override
+	public Recipe getRecipe(long recipeId) {
+		Recipe recipe = null;
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			Query query = session.createQuery("from Recipe where ID = :recipe_id");
+			query.setParameter("recipe_id", recipeId);
+			recipe = (Recipe) query.uniqueResult();
+		} finally {
+			session.close();
+		}
+		
+		return recipe;
 	}
 	
 	@Override
@@ -67,23 +79,18 @@ public class RecipeSqliteDao implements RecipeDao {
 		}
 	}
 	
-	
-	
-	/*
-	 * (non-Javadoc)
-	 * @see recipes.dao.RecipeDao#getIngredients(int)
-	 */
-	public List<Ingredient> getIngredients(int recipe_id) {
-		
-		List<Ingredient> ingredients = new ArrayList<Ingredient>();
-	
-		
-		return ingredients;
-
-}
-
-
-
+	@Override
+	public void updateRecipe(Recipe recipe) {
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			session .beginTransaction();
+			session.update(recipe);
+			session.getTransaction().commit();
+		} finally {
+			session.close();
+		}
+	}
 
 	@Override
 	public List<RecipeBook> getRecipeBooks() {
@@ -99,9 +106,6 @@ public class RecipeSqliteDao implements RecipeDao {
 		}
 		return recipesBooks;
 	}
-
-
-
 
 	@Override
 	public RecipeBook getRecipeBook(String name) {
@@ -133,6 +137,15 @@ public class RecipeSqliteDao implements RecipeDao {
 		}	
 	}
 
+
+
+
+	
+
+
+
+
+	
 
 
 

@@ -25,6 +25,7 @@ public class RecipeBook implements Serializable {
 	@XmlElement(required = true)
 	private int id;
 	
+	
 	@Column(name="NAME", nullable=false, unique=true)
 	@XmlElement(required = true)
 	private String name;
@@ -44,5 +45,33 @@ public class RecipeBook implements Serializable {
 	
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	@Override
+	public String toString() {
+		return getName();
+	}
+	
+	@Override
+	public boolean equals(Object object) {
+		
+		if(object == this) return true;
+		
+		if(!(object instanceof RecipeBook)) return false;
+		
+		RecipeBook book = (RecipeBook) object;
+		
+		if(book.getId() != this.getId()) return false;
+		if(!book.getName().equals(this.getName())) return false;
+		
+		return true;
+	}
+	
+	@Override
+	public int hashCode() {
+		int result = 17;
+		result = 31 * result + id;
+		result = 31 * result + name.hashCode();
+		return result;
 	}
 }
