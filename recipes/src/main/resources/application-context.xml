@@ -6,9 +6,13 @@
                            http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd
                            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
+	<bean id="xmlResource" class="org.springframework.core.io.ClassPathResource">
+		<constructor-arg index="0" value="recipes.xml"/>
+	</bean>
+
 	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="org.sqlite.JDBC"/>
-		<property name="url" value="jdbc:sqlite:/home/lockc/git/java-dev/recipes/recipes.db"/>
+		<property name="url" value="jdbc:sqlite:src/main/resources/recipes.db"/>
 	</bean>
 
 	<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean" >
@@ -28,7 +32,11 @@
 		<constructor-arg index="0" ref="sessionFactory"/>
 	</bean>
 	
-	<bean id="recipesWindow" class="recipes.gui.RecipesWindow" factory-method="launch">
+	<bean id="xmlDao" class="recipes.dao.RecipeXmlDao">
+		<constructor-arg index="0" ref="xmlResource"/>
+	</bean>
+	
+	<bean id="recipesWindow" class="recipes.gui.RecipesWindow" factory-method="newInstance">
 		<constructor-arg index="0" ref="dao"/>
 	</bean>
 	

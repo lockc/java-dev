@@ -1,5 +1,6 @@
 package recipes.app;
 
+import java.awt.EventQueue;
 import java.util.List;
 import java.util.Properties;
 
@@ -7,9 +8,9 @@ import org.apache.log4j.PropertyConfigurator;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import recipes.dao.RecipeDao;
-import recipes.dao.RecipeXmlDao;
 import recipes.domain.Recipe;
 import recipes.domain.RecipeBook;
+import recipes.gui.RecipesWindow;
 
 /**
  * @author lockc
@@ -20,6 +21,7 @@ public class RecipeApp {
 	public static Properties properties;
 	
 	private static RecipeDao dao;
+	private static RecipeDao xmlDao;
 	
 	public static void main(String[] args) throws Exception {
 		
@@ -28,7 +30,20 @@ public class RecipeApp {
 		PropertyConfigurator.configure("src/main/resources/settings.properties");
 		
 		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("application-context.xml");
+		
 		dao = (RecipeDao) context.getBean("dao");
+		xmlDao = (RecipeDao) context.getBean("xmlDao");
+		
+		xmlDao.getAllRecipes();
+		
+		final RecipesWindow window = (RecipesWindow) context.getBean("recipesWindow");
+		
+		
+		EventQueue.invokeAndWait(new Runnable() {
+			public void run() {
+				window.show();
+			}
+		});
 		
 		
 		
@@ -39,12 +54,10 @@ public class RecipeApp {
 	
 	
 	private static void importXmlToSqlite() {
-		RecipeXmlDao xmlDao = new RecipeXmlDao();
+		
 		List<Recipe> recipes = xmlDao.getAllRecipes();
 		
 		for(Recipe r : recipes) {
-			
-			System.out.println(r.getName());
 			
 			RecipeBook book = dao.getRecipeBook(r.getRecipeBook().getName());
 			if(book != null) {

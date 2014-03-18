@@ -4,17 +4,14 @@
 package recipes.dao;
 
 import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.bind.JAXBException;
 
-import recipes.domain.Ingredient;
+import org.springframework.core.io.Resource;
+
 import recipes.domain.Recipe;
 import recipes.domain.RecipeBook;
 import recipes.domain.Recipes;
@@ -26,30 +23,13 @@ import recipes.serialisation.XmlSerialiser;
  */
 public class RecipeXmlDao implements RecipeDao {
 
-	
-	private InputStream in;
-	
+	private Resource xmlResource;
 	private String xml;
 	
-
-	private void loadXml(String file) throws IOException {
-//		in = this.getClass().getClassLoader().getResourceAsStream(file);
-		FileInputStream in = new FileInputStream(file);
-		
-		InputStreamReader is = new InputStreamReader(in);
-		StringBuilder sb=new StringBuilder();
-		BufferedReader br = new BufferedReader(is);
-		String read = br.readLine();
-
-		while(read != null) {
-		    //System.out.println(read);
-		    sb.append(read);
-		    read =br.readLine();
-
-		}
-
-		xml = sb.toString();
+	public RecipeXmlDao(Resource xmlResource) {
+		this.xmlResource = xmlResource;
 	}
+	
 
 
 	/* (non-Javadoc)
@@ -59,7 +39,8 @@ public class RecipeXmlDao implements RecipeDao {
 	public List<Recipe> getAllRecipes()  {
 		
 		try {
-			loadXml(System.getProperty("user.dir") + System.getProperty("file.separator") + "recipes.xml");
+//			loadXml(System.getProperty("user.dir") + System.getProperty("file.separator") + "recipes.xml");
+			loadXml(xmlResource);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -118,4 +99,21 @@ public class RecipeXmlDao implements RecipeDao {
 		
 	}
 
+	
+	
+	private void loadXml(Resource resource) throws IOException {
+//		in = this.getClass().getClassLoader().getResourceAsStream(file);
+		InputStreamReader is = new InputStreamReader(resource.getInputStream());
+		StringBuilder sb=new StringBuilder();
+		BufferedReader br = new BufferedReader(is);
+		String read = br.readLine();
+
+		while(read != null) {
+		    sb.append(read);
+		    read =br.readLine();
+
+		}
+
+		xml = sb.toString();
+	}
 }

@@ -1,6 +1,5 @@
 package recipes.gui;
 
-import java.awt.EventQueue;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.FileOutputStream;
@@ -27,49 +26,102 @@ import java.awt.event.ActionEvent;
 public class RecipesWindow {
 
 	private RecipeDao dao;
+	private List<Recipe> allRecipes;
+	private List<Recipe> selectedRecipes;
 	
 	private JFrame frame;
 	private JList<Recipe> listAvailable;
 	private JList<Recipe> listSelected;
 	private DefaultListModel<Recipe> resultListSelected = new DefaultListModel<Recipe>();
 	private DefaultListModel<Recipe> resultListAvailable = new DefaultListModel<Recipe>();
-	
-	private List<Recipe> allRecipes;
-	private List<Recipe> selectedRecipes;
+	private JButton btnAddMeal;
+	private JButton btnRemoveMeal;
+	private JButton btnShoppingList;
+	private JButton btnAddRecipe;
+	private JButton btnEditRecipe;
 
-	public RecipesWindow() {
+	private RecipesWindow(RecipeDao dao) {
+		this.dao = dao;
 		initialize();
 	}
 	
-	/**
-	 * @wbp.parser.entryPoint
-	 */
-	private RecipesWindow(RecipeDao dao) throws Exception {
-		this();
-		this.dao = dao;
-		allRecipes = dao.getAllRecipes();
-		selectedRecipes = new ArrayList<Recipe>();
+	public static RecipesWindow newInstance(RecipeDao dao) {
+		return new RecipesWindow(dao);
 	}
 	
-	/**
-	 * @wbp.parser.entryPoint
-	 */
-	public static RecipesWindow launch(RecipeDao dao) throws Exception {
-		final RecipesWindow window = new RecipesWindow(dao);
+	public void show() {
+		allRecipes = dao.getAllRecipes();
+		selectedRecipes = new ArrayList<Recipe>();
+		registerEvents();
+		populateAvailable();
+		frame.setVisible(true);
+	}
+	
+	private void populateAvailable() {
+		for(Recipe available : allRecipes) {
+			resultListAvailable.addElement(available);
+		}
+		frame.getContentPane().validate();
+	}
+	
+	private void registerEvents() {
 		
-		EventQueue.invokeAndWait(new Runnable() {
-			public void run() {
-				try {
-					window.initialize();
-					window.populateAvailable();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
+		btnAddMeal.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				Object[] values = listAvailable.getSelectedValues();
+				for(Object value : values) {
+					resultListSelected.addElement((Recipe)value);
+					resultListAvailable.remove(resultListAvailable.indexOf(value));
+					selectedRecipes.add(findRecipe(String.valueOf(value)));
 				}
 			}
 		});
 		
-		return window;
+		btnRemoveMeal.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+				Object[] values = listSelected.getSelectedValues();
+				for(Object value : values) {
+					resultListAvailable.addElement((Recipe)value);
+					resultListSelected.remove(resultListSelected.indexOf(value));
+					selectedRecipes.remove(findRecipe(String.valueOf(value)));
+				}
+				
+			}
+		});
+		
+		btnShoppingList.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				try {
+					createShoppingList();
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				
+			}
+		});
+		
+		btnAddRecipe.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+				RecipeEditor editor = RecipeEditor.newInstance(new RecipeEditorDelegate(dao, null));
+				editor.show();
+				
+			}
+		});
+		
+		btnEditRecipe.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Recipe recipe = (Recipe) listAvailable.getSelectedValues()[0];
+				RecipeEditor editor = RecipeEditor.newInstance(new RecipeEditorDelegate(dao, recipe));
+				editor.show();
+			}
+		});
 	}
 	
 
@@ -101,93 +153,39 @@ public class RecipesWindow {
 		scrollPane.setBounds(31, 26, 258, 410);
 		panel.add(scrollPane);
 		
-		listAvailable = new JList();
+		listAvailable = new JList<Recipe>();
 		listAvailable.setVisibleRowCount(20);
 		scrollPane.setViewportView(listAvailable);
 		listAvailable.setModel(resultListAvailable);
 		
-		JButton btnAddMeal = new JButton(">>");
-		btnAddMeal.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				Object[] values = listAvailable.getSelectedValues();
-				for(Object value : values) {
-					resultListSelected.addElement((Recipe)value);
-					resultListAvailable.remove(resultListAvailable.indexOf(value));
-					selectedRecipes.add(findRecipe(String.valueOf(value)));
-				}
-			}
-		});
+		btnAddMeal = new JButton(">>");
 		btnAddMeal.setBounds(320, 210, 62, 23);
 		panel.add(btnAddMeal);
 		
-		JButton btnRemoveMeal = new JButton("<<");
+		btnRemoveMeal = new JButton("<<");
 		btnRemoveMeal.setBounds(320, 245, 62, 23);
 		panel.add(btnRemoveMeal);
-		btnRemoveMeal.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				
-				Object[] values = listSelected.getSelectedValues();
-				for(Object value : values) {
-					resultListAvailable.addElement((Recipe)value);
-					resultListSelected.remove(resultListSelected.indexOf(value));
-					selectedRecipes.remove(findRecipe(String.valueOf(value)));
-				}
-				
-			}
-		});
+		
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
 		scrollPane_1.setBounds(425, 26, 258, 410);
 		panel.add(scrollPane_1);
 		
-		listSelected = new JList();
+		listSelected = new JList<Recipe>();
 		scrollPane_1.setViewportView(listSelected);
 		listSelected.setModel(resultListSelected);
 		
-		JButton btnNewButton = new JButton("Create shopping list...");
-		btnNewButton.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				try {
-					createShoppingList();
-				} catch (Exception e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				
-				
-			}
-		});
+		btnShoppingList = new JButton("Create shopping list...");
+		btnShoppingList.setBounds(425, 452, 258, 23);
+		panel.add(btnShoppingList);
 		
-		
-		
-		btnNewButton.setBounds(425, 452, 258, 23);
-		panel.add(btnNewButton);
-		
-		JButton btnAddRecipe = new JButton("Add");
-		btnAddRecipe.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				
-				RecipeEditor editor = RecipeEditor.newInstance(new RecipeEditorDelegate(dao, null));
-				editor.show();
-				
-			}
-		});
+		btnAddRecipe = new JButton("Add");
 		btnAddRecipe.setBounds(31, 451, 117, 25);
 		panel.add(btnAddRecipe);
 		
-		JButton btnEdit = new JButton("Edit");
-		btnEdit.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				Recipe recipe = (Recipe) listAvailable.getSelectedValues()[0];
-				RecipeEditor editor = RecipeEditor.newInstance(new RecipeEditorDelegate(dao, recipe));
-				editor.show();
-			}
-		});
-		btnEdit.setBounds(172, 451, 117, 25);
-		panel.add(btnEdit);
+		btnEditRecipe = new JButton("Edit");
+		btnEditRecipe.setBounds(172, 451, 117, 25);
+		panel.add(btnEditRecipe);
 		
 	}
 	
@@ -227,10 +225,5 @@ public class RecipesWindow {
 		return null;
 	}
 	
-	public void populateAvailable() {
-		for(Recipe available : allRecipes) {
-			resultListAvailable.addElement(available);
-		}
-		frame.getContentPane().validate();
-	}
+	
 }
