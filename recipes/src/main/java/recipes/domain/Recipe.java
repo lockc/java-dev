@@ -14,7 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -24,7 +24,6 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import recipes.serialisation.IngredientAdaptor;
 import recipes.serialisation.RecipeBookAdaptor;
-
 
 /**
  * @author lockc
@@ -46,14 +45,6 @@ public class Recipe implements Serializable {
 	@Column(name="NAME", unique=false, nullable=false)
 	@XmlElement(required = true)
 	private String name;
-	
-	@Transient
-	@XmlElement(required = true)
-	private RecipeCategory category;
-	
-	@Transient
-	@XmlElement(name = "carb-type", required = true)
-	private CarbType carbType;
 	
 	/*
 	 * Many recipes can have the same recipe book.  This relationship is unidirectional
@@ -81,28 +72,7 @@ public class Recipe implements Serializable {
 	@XmlElementWrapper(name="ingredients")
     @XmlElement(name="ingredient")
 	@XmlJavaTypeAdapter(value=IngredientAdaptor.class)
-	private List<Ingredient> ingredients;
-	
-	
-	
-	public Recipe() {
-		super();
-		ingredients = new ArrayList<Ingredient>();
-	}
-
-
-
-
-
-	public Recipe(String name, RecipeCategory category, CarbType carbType, RecipeBook recipeBook, int pageNumber, Ingredients ingredients) {
-		super();
-		this.name = name;
-		this.category = category;
-		this.carbType = carbType;
-		this.recipeBook = recipeBook;
-		this.pageNumber = pageNumber;
-	}
-	
+	private List<Ingredient> ingredients = new ArrayList<Ingredient>();
 	
 
 	public int getRecipeId() {
@@ -121,28 +91,12 @@ public class Recipe implements Serializable {
 		this.ingredients = ingredients;
 	}
 
-	public CarbType getCarbType() {
-		return carbType;
-	}
-
-	public void setCarbType(CarbType carbType) {
-		this.carbType = carbType;
-	}
-
 	public String getName() {
 		return name;
 	}
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public RecipeCategory getCategory() {
-		return category;
-	}
-
-	public void setCategory(RecipeCategory category) {
-		this.category = category;
 	}
 
 	public RecipeBook getRecipeBook() {
