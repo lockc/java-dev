@@ -44,6 +44,7 @@ public class RecipeEditorDelegate {
 		recipe.setPageNumber(Integer.valueOf(page));
 		recipe.setRecipeBook(book);
 		
+		recipe.getIngredients().clear();
 		List<Ingredient> ingredients2 = new ArrayList<>();
 		
 		String[] ingredientsArr = ingredients.split("\n");
@@ -63,16 +64,21 @@ public class RecipeEditorDelegate {
 		recipe.setPageNumber(Integer.valueOf(page));
 		recipe.setRecipeBook(book);
 		
-//		List<Ingredient> ingredients2 = new ArrayList<>();
-//		
-//		String[] ingredientsArr = ingredients.split("\n");
-//		for(String i : ingredientsArr) {
-//			Ingredient e = new Ingredient();
-//			e.setDescription(i);
-//			ingredients2.add(e);
-//		}
-//		recipe.setIngredients(ingredients2);
+		recipe.getIngredients().clear();
+		dao.updateRecipe(recipe);
+		
+		for(String i : ingredients.split("\n")) {
+			Ingredient e = new Ingredient();
+			e.setRecipeId(recipe.getRecipeId());
+			e.setDescription(i);
+			recipe.getIngredients().add(e);
+		}
 		
 		dao.updateRecipe(recipe);
+	}
+
+	public void deleteRecipe() {
+		// TODO Auto-generated method stub
+		dao.deleteRecipe(recipe);
 	}
 }

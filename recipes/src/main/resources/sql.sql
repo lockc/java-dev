@@ -1,3 +1,9 @@
+select * from recipes where name = 'test 8';
+
+select * from ingredients where recipe_id = 455;
+delete from ingredients where recipe_id = 455;
+
+
 select * from recipes;
 select * from recipe_books;
 select * from ingredients;

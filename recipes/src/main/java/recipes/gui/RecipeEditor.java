@@ -18,6 +18,7 @@ import javax.swing.JLabel;
 import java.awt.BorderLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowListener;
 
 public class RecipeEditor {
 
@@ -25,6 +26,7 @@ public class RecipeEditor {
 	
 	private JFrame frame;
 	private JButton btnSave;
+	private JButton btnDelete;
 	private JTextField textFieldRecipeName;
 	private JTextField textFieldPageNumber;
 	private JComboBox<RecipeBook> comboBoxRecipeBook;
@@ -44,6 +46,10 @@ public class RecipeEditor {
 		registerEvents();
 		prePopulateRecipe();
 		frame.setVisible(true);
+	}
+	
+	public void registerWindowListener(WindowListener listener) {
+		frame.addWindowListener(listener);
 	}
 
 	private void loadRecipeBooks() {
@@ -83,6 +89,14 @@ public class RecipeEditor {
 				frame.dispose();
 			}
 		});
+		
+		btnDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				delegate.deleteRecipe();
+			}
+		});
+		
+		
 	}
 	
 	private void initialize() {
@@ -131,5 +145,9 @@ public class RecipeEditor {
 		JLabel lblIngredients = new JLabel("Ingredients");
 		lblIngredients.setBounds(12, 122, 104, 15);
 		panel.add(lblIngredients);
+		
+		btnDelete = new JButton("Delete");
+		btnDelete.setBounds(143, 380, 117, 25);
+		panel.add(btnDelete);
 	}
 }

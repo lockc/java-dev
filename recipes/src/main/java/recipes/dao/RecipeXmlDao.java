@@ -9,9 +9,9 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import org.springframework.core.io.Resource;
 
+import recipes.domain.Ingredient;
 import recipes.domain.Recipe;
 import recipes.domain.RecipeBook;
 import recipes.domain.Recipes;
@@ -115,5 +115,21 @@ public class RecipeXmlDao implements RecipeDao {
 		}
 
 		xml = sb.toString();
+	}
+
+
+
+	@Override
+	public void deleteIngredients(Recipe recipe) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+
+	@Override
+	public void deleteRecipe(Recipe recipe) {
+		// TODO Auto-generated method stub
+		
 	}
 }

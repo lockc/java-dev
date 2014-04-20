@@ -4,6 +4,7 @@
 package recipes.dao;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -86,6 +87,21 @@ public class RecipeSqliteDao implements RecipeDao {
 			session = sessionFactory.openSession();
 			session .beginTransaction();
 			session.update(recipe);
+			
+			session.getTransaction().commit();
+		} finally {
+			session.close();
+		}
+	}
+	
+	@Override
+	public void deleteIngredients(Recipe recipe) {
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			session .beginTransaction();
+			session.delete(recipe.getIngredients());
+			
 			session.getTransaction().commit();
 		} finally {
 			session.close();
@@ -136,6 +152,33 @@ public class RecipeSqliteDao implements RecipeDao {
 			session.close();
 		}	
 	}
+
+
+
+
+	@Override
+	public void deleteRecipe(Recipe recipe) {
+		Session session = null;
+		try {
+			session = sessionFactory.openSession();
+			session .beginTransaction();
+			
+			Iterator<Ingredient> it = recipe.getIngredients().iterator();
+			while (it.hasNext()) {
+				Ingredient i = it.next();
+				it.remove();
+				session.delete(i);
+			}
+			
+			session.delete(recipe);
+			session.flush(); 
+			session.getTransaction().commit();
+		} finally {
+			session.close();
+		}	
+	}
+	
+
 
 
 

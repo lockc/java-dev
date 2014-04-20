@@ -2,6 +2,9 @@ package recipes.gui;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +53,6 @@ public class RecipesWindow {
 	}
 	
 	public void show() {
-		allRecipes = dao.getAllRecipes();
 		selectedRecipes = new ArrayList<Recipe>();
 		registerEvents();
 		populateAvailable();
@@ -58,13 +60,20 @@ public class RecipesWindow {
 	}
 	
 	private void populateAvailable() {
+		clearAvailable();
+		allRecipes = dao.getAllRecipes();
 		for(Recipe available : allRecipes) {
 			resultListAvailable.addElement(available);
 		}
 		frame.getContentPane().validate();
 	}
 	
+	private void clearAvailable() {
+		resultListAvailable.clear();
+	}
+	
 	private void registerEvents() {
+		
 		
 		btnAddMeal.addMouseListener(new MouseAdapter() {
 			@Override
@@ -112,6 +121,12 @@ public class RecipesWindow {
 				RecipeEditor editor = RecipeEditor.newInstance(new RecipeEditorDelegate(dao, null));
 				editor.show();
 				
+				editor.registerWindowListener(new WindowAdapter() {
+					@Override
+					public void windowClosed(WindowEvent arg0) {
+						populateAvailable();
+					}
+				});
 			}
 		});
 		
@@ -120,6 +135,14 @@ public class RecipesWindow {
 				Recipe recipe = (Recipe) listAvailable.getSelectedValues()[0];
 				RecipeEditor editor = RecipeEditor.newInstance(new RecipeEditorDelegate(dao, recipe));
 				editor.show();
+
+				
+				editor.registerWindowListener(new WindowAdapter() {
+					@Override
+					public void windowClosed(WindowEvent arg0) {
+						populateAvailable();
+					}
+				});
 			}
 		});
 	}

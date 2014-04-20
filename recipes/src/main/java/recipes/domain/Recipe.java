@@ -66,8 +66,11 @@ public class Recipe implements Serializable {
 	 * CascadeType.ALL ensures that the List of ingredients are persisted with the
 	 * recipe.  Without this Transient object errors are thrown because the list isn't
 	 * a persisted object.
+	 * 
+	 * 
 	 */
-	@OneToMany(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
+	
+	@OneToMany(orphanRemoval=true, cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
 	@JoinColumn(name="RECIPE_ID")
 	@XmlElementWrapper(name="ingredients")
     @XmlElement(name="ingredient")

@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -32,12 +33,15 @@ public class Ingredient implements Serializable {
 	private int id;
 	
 	@XmlTransient
-	@Column(name="RECIPE_ID", unique=false, nullable=false)
+	@Column(name="RECIPE_ID", unique=false)
 	private int recipeId;
 	
-	@Column(name="DESC", unique=false, nullable=false)
+	@Column(name="DESC", unique=false)
 	@XmlElement
 	private String description;
+	
+//	@ManyToOne
+//	private Recipe recipe;
 		
 	public int getId() {
 		return id;
