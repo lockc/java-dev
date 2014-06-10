@@ -1,9 +1,7 @@
 package lockc.websocket.example;
 
 import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
-import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.websocket.jsr356.server.ServerContainer;
 import org.eclipse.jetty.websocket.jsr356.server.deploy.WebSocketServerContainerInitializer;
 
@@ -23,7 +21,7 @@ public class ServerStarter {
             // Initialize the JSR-356 layer
             ServerContainer container = WebSocketServerContainerInitializer.configureContext(context);
             // Manually add the endpoint
-            container.addEndpoint(MyServerEndpoint.class);
+            container.addEndpoint(JsrServerEndpoint.class);
             
             server.start(); // start server
             server.join(); // wait for server to stop

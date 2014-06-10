@@ -12,7 +12,7 @@
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
-     -->
+     
     <servlet>
     	<servlet-name>helloservlet</servlet-name>
     	<servlet-class>lockc.websocket.example.MyWebSocketServlet</servlet-class>
@@ -22,5 +22,5 @@
         <servlet-name>helloservlet</servlet-name>
         <url-pattern>/hello</url-pattern>
     </servlet-mapping>
-
+-->
 </web-app>

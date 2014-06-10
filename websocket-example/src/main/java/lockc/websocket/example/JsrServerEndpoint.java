@@ -9,10 +9,11 @@ import javax.websocket.OnError;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
-import javax.websocket.server.*;
+import javax.websocket.server.ServerEndpoint;
 
-@ServerEndpoint(value="/hello")
-public class MyServerEndpoint {
+
+@ServerEndpoint(value = "/hello/jsr", configurator=JsrServerConfigurator.class)
+public class JsrServerEndpoint {
 
 	@OnOpen
 	public void onOpen(Session session) {
@@ -27,6 +28,7 @@ public class MyServerEndpoint {
 	@OnMessage()
 	public void onMessage(String message, Session session) throws IOException {
 		System.out.println("onMessage executed: " + message);
+		session.getBasicRemote().sendText("hello there!!");
 		session.close(new CloseReason(CloseCodes.NORMAL_CLOSURE, "Bye bye."));
 	}
 	
