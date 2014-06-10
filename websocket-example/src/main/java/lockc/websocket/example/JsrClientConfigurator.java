@@ -10,10 +10,8 @@ public class JsrClientConfigurator extends Configurator {
 
 	@Override
 	public void beforeRequest(Map<String, List<String>> headers) {
-		System.out.println("my JsrClientConfigurator is running !!!!!!!!!!!!!!");
-		
 		super.beforeRequest(headers);
-//		headers.put("X-Application", Arrays.asList("whoo hoow"));
+		headers.put("X-Application", Arrays.asList("whoo hoow"));
 		headers.put("X-Authentication", Arrays.asList("<<session token>>="));
 		headers.put("X-IP", Arrays.asList("10.2.50.120"));        
     }

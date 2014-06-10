@@ -1,9 +1,6 @@
 package lockc.websocket.example;
 
-import java.io.IOException;
-
 import javax.websocket.CloseReason;
-import javax.websocket.CloseReason.CloseCodes;
 import javax.websocket.EndpointConfig;
 import javax.websocket.OnClose;
 import javax.websocket.OnError;
@@ -19,23 +16,25 @@ public class JsrServerEndpoint {
 	@OnOpen
 	public void onOpen(Session session, EndpointConfig endpointConfig) {
 		System.out.println("onOpen executed.");
+		
+		
+		
+		MessageSender.SESSIONS.add(session);
 	}
 	
 	@OnClose
 	public void onClose(Session session, CloseReason closeReason) {
-		System.out.println("onClose executed.");
+		System.out.println("onClose executed. " + closeReason);
 	}
 	
 	@OnMessage()
-	public void onMessage(Session session, String message) throws IOException {
+	public void onMessage(Session session, String message) {
 		System.out.println("onMessage executed: " + message);
-		session.getBasicRemote().sendText("hello there!!");
-		session.close(new CloseReason(CloseCodes.NORMAL_CLOSURE, "Bye bye."));
 	}
 	
 	@OnError
 	public void onError(Session session, Throwable error) {
-		System.out.println("onError executed.");
+		System.out.println("onError executed." + error);
 	}
 	
 }

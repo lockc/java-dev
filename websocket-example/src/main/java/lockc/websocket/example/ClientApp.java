@@ -21,7 +21,7 @@ public class ClientApp {
 			session.getBasicRemote().sendText("err what!? " + x);
 			Thread.sleep(1000);
 		}
-			
+		
 		
 		( ( ClientContainer )container ).stop();
 		

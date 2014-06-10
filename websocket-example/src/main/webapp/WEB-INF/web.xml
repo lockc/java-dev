@@ -3,7 +3,7 @@
  "http://java.sun.com/dtd/web-app_2_3.dtd" >
 
 <web-app>
-<!-- 
+
     <context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>classpath:applicationContext.xml</param-value>
@@ -12,15 +12,5 @@
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
-     
-    <servlet>
-    	<servlet-name>helloservlet</servlet-name>
-    	<servlet-class>lockc.websocket.example.MyWebSocketServlet</servlet-class>
-    </servlet>
-    
-    <servlet-mapping>
-        <servlet-name>helloservlet</servlet-name>
-        <url-pattern>/hello</url-pattern>
-    </servlet-mapping>
--->
+   
 </web-app>
