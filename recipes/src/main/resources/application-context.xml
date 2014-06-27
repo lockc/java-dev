@@ -32,12 +32,16 @@
 		<constructor-arg index="0" ref="sessionFactory"/>
 	</bean>
 	
+	<bean id="jdbcDao" class="recipes.dao.RecipeSqliteJdbcDao">
+		<property name="dataSource" ref="dataSource"/>
+	</bean>
+	
 	<bean id="xmlDao" class="recipes.dao.RecipeXmlDao">
 		<constructor-arg index="0" ref="xmlResource"/>
 	</bean>
 	
 	<bean id="recipesWindow" class="recipes.gui.RecipesWindow" factory-method="newInstance">
-		<constructor-arg index="0" ref="dao"/>
+		<constructor-arg index="0" ref="jdbcDao"/>
 	</bean>
 	
 	

@@ -93,6 +93,8 @@ public class RecipeEditor {
 		btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				delegate.deleteRecipe();
+				frame.setVisible(false);
+				frame.dispose();
 			}
 		});
 		
