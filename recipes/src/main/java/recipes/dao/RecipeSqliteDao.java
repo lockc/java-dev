@@ -51,7 +51,7 @@ public class RecipeSqliteDao implements RecipeDao {
 	}
 	
 	@Override
-	public Recipe getRecipe(long recipeId) {
+	public Recipe getRecipe(int recipeId) {
 		Recipe recipe = null;
 		Session session = null;
 		try {

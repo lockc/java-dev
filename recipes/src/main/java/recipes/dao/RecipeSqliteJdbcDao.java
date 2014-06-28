@@ -24,6 +24,11 @@ public class RecipeSqliteJdbcDao extends JdbcDaoSupport implements RecipeDao {
 	public List<Recipe> getAllRecipes() {
 		return doGetAllRecipes();
 	}
+	
+	@Override
+	public Recipe getRecipe(int recipeId) {
+		return doGetRecipe(recipeId);
+	}
 
 	@Override
 	public List<RecipeBook> getRecipeBooks() {
@@ -32,51 +37,14 @@ public class RecipeSqliteJdbcDao extends JdbcDaoSupport implements RecipeDao {
 	
 	@Override
 	public RecipeBook getRecipeBook(String name) {
-		
-		String sql = "select r.id, r.name from recipe_books r where r.name = ?";
-		
-		return getJdbcTemplate().queryForObject(sql, new RowMapper<RecipeBook>() {
-
-			@Override
-			public RecipeBook mapRow(ResultSet rs, int rowNum) throws SQLException {
-				RecipeBook b = new RecipeBook();
-				b.setId(rs.getInt(1));
-				b.setName(rs.getString(2));
-				
-				return b;
-			}
-		}, name);
+		return doGetRecipeBook(name);
 	}
-
-	@Override
-	public Recipe getRecipe(long recipeId) {
-		return null;
-	}
-	
-	/*
-	 * String sql = "select r.id, r.name, r.recipe_book_id, r.page_no from recipes r where r.id = ?";
-		
-		getJdbcTemplate().queryForObject(sql, new RowMapper<Recipe>() {
-
-			@Override
-			public Recipe mapRow(ResultSet rs, int rowNum) throws SQLException {
-				
-				// TODO Auto-generated method stub
-				
-				return null;
-			}
-		}, recipeId);
-		
-		return null;
-		
-		
-	 */
 
 	@Override
 	public void addRecipeBook(RecipeBook recipeBook) {
 		// TODO Auto-generated method stub
 
-	}
+	} 
 
 	@Override
 	public void addRecipe(Recipe recipe) {
@@ -86,22 +54,38 @@ public class RecipeSqliteJdbcDao extends JdbcDaoSupport implements RecipeDao {
 		doInsertIngredients(recipe);
 	}
 
-	
-
 	@Override
 	public void updateRecipe(Recipe recipe) {
-		// TODO Auto-generated method stub
+		doUpdateRecipe(recipe);
+		doDeleteIngredients(recipe);
+		doInsertIngredients(recipe);
+	}
 
+	private void doUpdateRecipe(final Recipe recipe) {
+		getJdbcTemplate().update(new PreparedStatementCreator() {
+			String sql = "update recipes set name=?, recipe_book_id=?, page_no=? "
+					+ "where id=?";	
+			@Override
+			public PreparedStatement createPreparedStatement(Connection con)
+					throws SQLException {
+				PreparedStatement ps = con.prepareStatement(sql);
+				ps.setString(1, recipe.getName());
+				ps.setInt(2, recipe.getRecipeBook().getId());
+				ps.setInt(3, recipe.getPageNumber());
+				ps.setInt(4, recipe.getRecipeId());
+				return ps;
+			}
+		});
 	}
 
 	@Override
 	public void deleteIngredients(Recipe recipe) {
-		doDeleteIngredients(recipe.getRecipeId());
+		doDeleteIngredients(recipe);
 	}
 
 	@Override
 	public void deleteRecipe(Recipe recipe) {
-		doDeleteIngredients(recipe.getRecipeId());
+		doDeleteIngredients(recipe);
 		doDeleteRecipe(recipe.getRecipeId());
 	}
 	
@@ -110,7 +94,9 @@ public class RecipeSqliteJdbcDao extends JdbcDaoSupport implements RecipeDao {
 	
 	
 	
-	private void doDeleteIngredients(final int recipeId) {
+	private void doDeleteIngredients(Recipe recipe) {
+		final int recipeId = recipe.getRecipeId();
+		
 		getJdbcTemplate().update(new PreparedStatementCreator() {
 			
 			@Override
@@ -188,7 +174,7 @@ public class RecipeSqliteJdbcDao extends JdbcDaoSupport implements RecipeDao {
 					r.setName(rs.getString(2));
 					r.setPageNumber(rs.getInt(4));
 					
-					RecipeBook recipeBook = getRecipeBook(rs.getInt(3));
+					RecipeBook recipeBook = doGetRecipeBook(rs.getInt(3));
 					r.setRecipeBook(recipeBook);
 					
 					List<Ingredient> ingredients = doGetIngredients(rs.getInt(1));
@@ -201,6 +187,30 @@ public class RecipeSqliteJdbcDao extends JdbcDaoSupport implements RecipeDao {
 				return recipeList;
 			}
 		});
+	}
+	
+	private Recipe doGetRecipe(int recipeId) {
+		String sql = "select r.id, r.name, r.recipe_book_id, r.page_no from recipes r where r.id = ?";
+		
+		return getJdbcTemplate().queryForObject(sql, new RowMapper<Recipe>() {
+
+			@Override
+			public Recipe mapRow(ResultSet rs, int rowNum) throws SQLException {
+				
+				Recipe r = new Recipe();
+				r.setRecipeId(rs.getInt(1));
+				r.setName(rs.getString(2));
+				r.setPageNumber(rs.getInt(4));
+				
+				RecipeBook recipeBook = doGetRecipeBook(rs.getInt(3));
+				r.setRecipeBook(recipeBook);
+				
+				List<Ingredient> ingredients = doGetIngredients(rs.getInt(1));
+				r.setIngredients(ingredients);
+				
+				return r;
+			}
+		}, recipeId);
 	}
 	
 	private void doInsertRecipe(final Recipe recipe) {
@@ -241,7 +251,7 @@ public class RecipeSqliteJdbcDao extends JdbcDaoSupport implements RecipeDao {
 		return getJdbcTemplate().queryForObject("select r.id from recipes r where r.name = ?", Integer.class, name);
 	}
 	
-	private RecipeBook getRecipeBook(int id) {
+	private RecipeBook doGetRecipeBook(int id) {
 		
 		String sql = "select r.id, r.name from recipe_books r where r.id = ?";
 		
@@ -288,5 +298,21 @@ public class RecipeSqliteJdbcDao extends JdbcDaoSupport implements RecipeDao {
 				return ingredients;
 			}
 		});
+	}
+	
+	private RecipeBook doGetRecipeBook(String name) {
+		String sql = "select r.id, r.name from recipe_books r where r.name = ?";
+		
+		return getJdbcTemplate().queryForObject(sql, new RowMapper<RecipeBook>() {
+
+			@Override
+			public RecipeBook mapRow(ResultSet rs, int rowNum) throws SQLException {
+				RecipeBook b = new RecipeBook();
+				b.setId(rs.getInt(1));
+				b.setName(rs.getString(2));
+				
+				return b;
+			}
+		}, name);
 	}
 }
