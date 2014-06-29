@@ -4,7 +4,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +19,6 @@ import javax.swing.JPanel;
 import recipes.app.RecipeEditorDelegate;
 import recipes.dao.RecipeDao;
 import recipes.domain.Recipe;
-import recipes.tx.RecipeManager;
 
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
