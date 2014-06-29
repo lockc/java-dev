@@ -20,6 +20,7 @@ import javax.swing.JPanel;
 import recipes.app.RecipeEditorDelegate;
 import recipes.dao.RecipeDao;
 import recipes.domain.Recipe;
+import recipes.tx.RecipeManager;
 
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
@@ -119,6 +120,7 @@ public class RecipesWindow {
 			public void actionPerformed(ActionEvent arg0) {
 				
 				RecipeEditor editor = RecipeEditor.newInstance(new RecipeEditorDelegate(dao, null));
+				editor.disableDeleteButton();
 				editor.show();
 				
 				editor.registerWindowListener(new WindowAdapter() {

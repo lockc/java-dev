@@ -61,6 +61,20 @@ public class RecipeSqliteJdbcDao extends JdbcDaoSupport implements RecipeDao {
 		doInsertIngredients(recipe);
 	}
 
+	@Override
+	public void deleteIngredients(Recipe recipe) {
+		doDeleteIngredients(recipe);
+	}
+
+	@Override
+	public void deleteRecipe(Recipe recipe) {
+		doDeleteIngredients(recipe);
+		doDeleteRecipe(recipe.getRecipeId());
+	}
+	
+	
+	
+	
 	private void doUpdateRecipe(final Recipe recipe) {
 		getJdbcTemplate().update(new PreparedStatementCreator() {
 			String sql = "update recipes set name=?, recipe_book_id=?, page_no=? "
@@ -77,22 +91,6 @@ public class RecipeSqliteJdbcDao extends JdbcDaoSupport implements RecipeDao {
 			}
 		});
 	}
-
-	@Override
-	public void deleteIngredients(Recipe recipe) {
-		doDeleteIngredients(recipe);
-	}
-
-	@Override
-	public void deleteRecipe(Recipe recipe) {
-		doDeleteIngredients(recipe);
-		doDeleteRecipe(recipe.getRecipeId());
-	}
-	
-	
-	
-	
-	
 	
 	private void doDeleteIngredients(Recipe recipe) {
 		final int recipeId = recipe.getRecipeId();
@@ -232,7 +230,7 @@ public class RecipeSqliteJdbcDao extends JdbcDaoSupport implements RecipeDao {
 	private void doInsertIngredients(final Recipe recipe) {
 		final List<Ingredient> ingredients = recipe.getIngredients();
 		
-		getJdbcTemplate().batchUpdate("insert into ingredients (recipe_id, desc) values (?, ?)", new BatchPreparedStatementSetter() {
+		getJdbcTemplate().batchUpdate("insert into ingredients (recipe_id, descs) values (?, ?)", new BatchPreparedStatementSetter() {
 			
 			@Override
 			public void setValues(PreparedStatement ps, int i) throws SQLException {

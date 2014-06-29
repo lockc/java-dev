@@ -31,10 +31,10 @@ public class RecipeApp {
 		
 		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("application-context.xml");
 		
-		dao = (RecipeDao) context.getBean("dao");
-		xmlDao = (RecipeDao) context.getBean("xmlDao");
-		
-		xmlDao.getAllRecipes();
+//		dao = (RecipeDao) context.getBean("dao");
+//		xmlDao = (RecipeDao) context.getBean("xmlDao");
+//		
+//		xmlDao.getAllRecipes();
 		
 		final RecipesWindow window = (RecipesWindow) context.getBean("recipesWindow");
 		

@@ -152,4 +152,9 @@ public class RecipeEditor {
 		btnDelete.setBounds(143, 380, 117, 25);
 		panel.add(btnDelete);
 	}
+	
+	
+	public void disableDeleteButton() {
+		btnDelete.setEnabled(false);
+	}
 }
