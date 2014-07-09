@@ -1,0 +1,4 @@
+k,j,i,h,g,f,e,d,c,b,a
+a,a,a,a,a,a,a,a,a,a,a
+b,b,b,b,b,a,a,a,a,a,a
+z,y,x,w,v,u,t,s,r,q,p
