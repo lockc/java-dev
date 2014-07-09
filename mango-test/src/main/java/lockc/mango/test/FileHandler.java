@@ -15,11 +15,11 @@ public class FileHandler {
         return Files.readAllLines(path, Charset.defaultCharset());
     }
     
-    public static void writeLines(Path path, List<String> lines) throws IOException {
+    public static void writeLines(Path path, Iterable<String> lines) throws IOException {
         Files.write(path, lines, Charset.defaultCharset(), StandardOpenOption.CREATE);
     }
     
-    public static void printLines(List<String> lines) {
+    public static void printLines(Iterable<String> lines) {
         for(String line : lines) {
             System.out.println(line);
         }

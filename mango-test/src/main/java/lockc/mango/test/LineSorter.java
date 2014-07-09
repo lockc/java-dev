@@ -11,7 +11,7 @@ public class LineSorter {
 
     private static final String DELIMETER = ",";
     
-    public List<String> sortLines(List<String> lines) {
+    public List<String> sortLines(Iterable<String> lines) {
         List<String> reversedLines = new ArrayList<>();
         
         for(String line : lines) {
