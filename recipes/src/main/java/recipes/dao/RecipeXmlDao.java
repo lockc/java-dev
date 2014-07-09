@@ -11,7 +11,6 @@ import java.util.List;
 
 import org.springframework.core.io.Resource;
 
-import recipes.domain.Ingredient;
 import recipes.domain.Recipe;
 import recipes.domain.RecipeBook;
 import recipes.domain.Recipes;
@@ -42,7 +41,6 @@ public class RecipeXmlDao implements RecipeDao {
 //			loadXml(System.getProperty("user.dir") + System.getProperty("file.separator") + "recipes.xml");
 			loadXml(xmlResource);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return new ArrayList<Recipe>();
 		}
@@ -51,7 +49,6 @@ public class RecipeXmlDao implements RecipeDao {
 		try {
 			recipes = (Recipes) new XmlSerialiser().deserialise(xml, Recipes.class);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
 		
@@ -87,7 +84,7 @@ public class RecipeXmlDao implements RecipeDao {
 
 
 	@Override
-	public Recipe getRecipe(long recipeId) {
+	public Recipe getRecipe(int recipeId) {
 		// TODO Auto-generated method stub
 		return null;
 	}

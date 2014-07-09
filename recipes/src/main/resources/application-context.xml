@@ -2,10 +2,30 @@
 <beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns="http://www.springframework.org/schema/beans" xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:tx="http://www.springframework.org/schema/tx"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
                            http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd
-                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+                           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
 
+	<!-- 
+		Transaction Management
+	-->
+    <tx:annotation-driven proxy-target-class="true" transaction-manager="transactionManager" />
+    
+    <bean id="transactionManager"
+        class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+    
+    <bean id="recipeManager" class="recipes.tx.RecipeManagerImpl">
+    	<property name="recipeDao" ref="jdbcDao"/>
+    </bean>
+    
+    <!-- 
+    	Data Sources
+    -->
+    
 	<bean id="xmlResource" class="org.springframework.core.io.ClassPathResource">
 		<constructor-arg index="0" value="recipes.xml"/>
 	</bean>
@@ -14,6 +34,10 @@
 		<property name="driverClassName" value="org.sqlite.JDBC"/>
 		<property name="url" value="jdbc:sqlite:src/main/resources/recipes.db"/>
 	</bean>
+	
+	<!-- 
+		Hibernate Config
+	-->
 
 	<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean" >
 		<property name="dataSource" ref="dataSource"/>
@@ -28,16 +52,28 @@
 		</property>
 	</bean>
 	
-	<bean id="dao" class="recipes.dao.RecipeSqliteDao">
+	<!-- 
+		DAOs
+	-->
+	
+	<bean id="hibernateDao" class="recipes.dao.RecipeSqliteDao">
 		<constructor-arg index="0" ref="sessionFactory"/>
+	</bean>
+	
+	<bean id="jdbcDao" class="recipes.dao.RecipeSqliteJdbcDao">
+		<property name="dataSource" ref="dataSource"/>
 	</bean>
 	
 	<bean id="xmlDao" class="recipes.dao.RecipeXmlDao">
 		<constructor-arg index="0" ref="xmlResource"/>
 	</bean>
 	
+	<!--
+		GUI 
+	-->
+	
 	<bean id="recipesWindow" class="recipes.gui.RecipesWindow" factory-method="newInstance">
-		<constructor-arg index="0" ref="dao"/>
+		<constructor-arg index="0" ref="recipeManager"/>
 	</bean>
 	
 	

@@ -93,6 +93,8 @@ public class RecipeEditor {
 		btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				delegate.deleteRecipe();
+				frame.setVisible(false);
+				frame.dispose();
 			}
 		});
 		
@@ -149,5 +151,10 @@ public class RecipeEditor {
 		btnDelete = new JButton("Delete");
 		btnDelete.setBounds(143, 380, 117, 25);
 		panel.add(btnDelete);
+	}
+	
+	
+	public void disableDeleteButton() {
+		btnDelete.setEnabled(false);
 	}
 }

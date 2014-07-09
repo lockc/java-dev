@@ -4,7 +4,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -119,6 +118,7 @@ public class RecipesWindow {
 			public void actionPerformed(ActionEvent arg0) {
 				
 				RecipeEditor editor = RecipeEditor.newInstance(new RecipeEditorDelegate(dao, null));
+				editor.disableDeleteButton();
 				editor.show();
 				
 				editor.registerWindowListener(new WindowAdapter() {

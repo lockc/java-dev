@@ -21,7 +21,7 @@ public interface RecipeDao {
 	
 	RecipeBook getRecipeBook(String name);
 	
-	Recipe getRecipe(long recipeId);
+	Recipe getRecipe(int recipeId);
 	
 	void addRecipeBook(RecipeBook recipeBook);
 	
