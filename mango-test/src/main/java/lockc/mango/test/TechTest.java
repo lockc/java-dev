@@ -21,8 +21,6 @@ public class TechTest {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        
-
     }
 
 }

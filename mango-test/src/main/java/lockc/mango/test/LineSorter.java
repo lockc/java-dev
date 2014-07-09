@@ -45,10 +45,10 @@ public class LineSorter {
         while(it.hasNext()) {
             sb.append(it.next());
             if(it.hasNext()) {
-                sb.append(",");
+                sb.append(DELIMETER);
             }
         }
         return sb.toString();
     }
-        
+    
 }
