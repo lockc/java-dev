@@ -23,6 +23,20 @@ public class Exceptions {
 	}
 	
 	/*
+	 * Cannot catch a wider exception and re-assign the caught object 
+	 * 
+	 */
+	public static void method99() throws IOException, IllegalArgumentException {
+		try {
+			throwsIOException();
+			throwsIllegal();
+		} catch(Exception ex) {
+			ex = new IOException();
+			throw(ex);
+		}
+	}
+	
+	/*
 	 * But ... cannot throw a wider exception from a caught sub type
 	 */
 	public static void method2() throws IOException, IllegalArgumentException {

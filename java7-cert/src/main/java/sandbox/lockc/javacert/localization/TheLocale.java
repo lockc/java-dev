@@ -8,7 +8,7 @@ public class TheLocale {
 	
 	public static void main(String[] args) {
 		
-		
+		Locale.GERMAN.getDisplayCountry();
 //		identifyingAvailableLocales();
 		
 		creatingLocales();
