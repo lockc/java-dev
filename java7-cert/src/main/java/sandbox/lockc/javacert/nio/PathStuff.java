@@ -6,7 +6,7 @@ import java.nio.file.Paths;
 public class PathStuff {
 
 	public static void main(String[] args) {
-
+ 
 		/* ********************************
 		 * normalize - resolves redundant elements
 		 * ********************************/
@@ -77,6 +77,20 @@ public class PathStuff {
 		p2 = Paths.get("/c/d");
 		System.out.println(p1.resolve(p2));
 		
+		
+		
+		
+		/*
+		 * prints 'a'
+		 */
+		p1 = Paths.get("/home/lockc/a/b/c/d");
+		System.out.println(p1.subpath(2, 3).toString());
+		
+		/*
+		 * prints 'a'
+		 */
+		p1 = Paths.get("/home/lockc/a/b/c/d");
+		System.out.println(p1.getName(2).toString());
 	}
 
 

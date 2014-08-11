@@ -15,7 +15,7 @@ public class FindingFiles {
 	public static void main(String[] args) throws IOException {
 
 		
-		Files.walkFileTree(Paths.get("."), new FileFinderVisitor("glob:*.java"));
+		Files.walkFileTree(Paths.get("/home/lockc"), new FileFinderVisitor("glob:*.java"));
 		
 		Files.walkFileTree(Paths.get("."), new FileFinderVisitor("glob:FindingFiles.java"));
 		
