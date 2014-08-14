@@ -1,6 +1,7 @@
 package sandbox.lockc.javacert.enhancements;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class TheDiamond {
@@ -48,10 +49,31 @@ public class TheDiamond {
 		listOfPairs.add(new PairOf<Number, Number>(1, 2));
 		
 		for(PairOf<Number, Number> p : listOfPairs) {
-			p.getaThing().intValue();
+//			p.getaThing().intValue();
 		}
 		
 		
+		/**
+		 * This is bad but legal, non generic reference to a type inferred instantiation.
+		 * 
+		 * Same as PairOf<Object, Object>
+		 */
+		PairOf temp1 = new PairOf<>(1, "a");
+		PairOf temp2 = new PairOf<>("b", 2.0);
+		List<PairOf> pairs = Arrays.asList(temp1, temp2);
+		
+		for(PairOf p : pairs) {
+			System.out.println(p);
+		}
+		
+		
+		
+		
+		
+		/**
+		 * 
+		 */
+		PairOf<?,?> po = new PairOf<String, String>("", "");
 		
 	}
 	

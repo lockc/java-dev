@@ -14,7 +14,7 @@ public class PathStuff {
 		/*
 		 * prints '/home'
 		 */
-		Path p = Paths.get("/home/lockc/../.");
+		Path p = Paths.get("/home/./lockc/../.");
 		System.out.println(p.normalize());
 		
 		

@@ -230,7 +230,7 @@ public class RecipeSqliteJdbcDao extends JdbcDaoSupport implements RecipeDao {
 	private void doInsertIngredients(final Recipe recipe) {
 		final List<Ingredient> ingredients = recipe.getIngredients();
 		
-		getJdbcTemplate().batchUpdate("insert into ingredients (recipe_id, descs) values (?, ?)", new BatchPreparedStatementSetter() {
+		getJdbcTemplate().batchUpdate("insert into ingredients (recipe_id, desc) values (?, ?)", new BatchPreparedStatementSetter() {
 			
 			@Override
 			public void setValues(PreparedStatement ps, int i) throws SQLException {
