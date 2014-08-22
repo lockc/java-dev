@@ -3,9 +3,9 @@ package sandbox.lockc.algos.sorting;
 import java.util.Arrays;
 
 /**
- * An example of a selection sort algorithm.
+ * An example implementation of a selection sort algorithm.
  * 
- *  @see Algorithms Unlocked by Thomas H. Corman. Page 32, Chapter 3.
+ * @see Algorithms Unlocked by Thomas H. Corman. Page 32, Chapter 3.
  * 
  * @author lockc
  *
