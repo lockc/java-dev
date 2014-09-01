@@ -14,6 +14,10 @@ public class ForkJoinFrameowrk {
 		
 		SumTask task = new SumTask(numbers);
 		
+		// will use internal common pool
+		System.out.println(task.compute());
+		
+		// will use our pool
 		ForkJoinPool pool = new ForkJoinPool(4);
 		Integer result = pool.invoke(task);
 		System.out.println(result);

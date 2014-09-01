@@ -26,36 +26,6 @@ public class TheLocale {
 		printLocale(Locale.getDefault(), Locale.ENGLISH);
 		printLocale(Locale.getDefault());
 		
-		Locale.setDefault(new Locale("en", "GB"));
-		printLocale(Locale.getDefault(), Locale.ENGLISH);
-		printLocale(Locale.getDefault());
-		
-		// incorrect
-		Locale.setDefault(new Locale("en_GB"));
-		printLocale(Locale.getDefault(), Locale.ENGLISH);
-		printLocale(Locale.getDefault());
-		
-		// incorrect
-		Locale.setDefault(new Locale("en-GB"));
-		printLocale(Locale.getDefault(), Locale.ENGLISH);
-		printLocale(Locale.getDefault());
-		
-		
-		/*
-		 * forLanguageTag - Returns a locale for the specified IETF BCP 47 language tag string. 
-		 */
-		Locale.setDefault(Locale.forLanguageTag("en-GB"));
-		printLocale(Locale.getDefault(), Locale.ENGLISH);
-		printLocale(Locale.getDefault());
-		
-		// incorrect
-		Locale.setDefault(Locale.forLanguageTag("en_GB"));
-		printLocale(Locale.getDefault(), Locale.ENGLISH);
-		printLocale(Locale.getDefault());
-		
-		
-		
-		
 		/*
 		 * Constants
 		 */

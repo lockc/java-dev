@@ -2,7 +2,6 @@ package sandbox.lockc.javacert.localization;
 
 import java.text.DateFormat;
 import java.text.Format;
-import java.text.NumberFormat;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -32,7 +31,6 @@ public class DateFormatting {
 			Format formatter = DateFormat.getDateInstance(DateFormat.SHORT, locale);
 			System.out.println(locale.getDisplayCountry(locale) + ": " + formatter.format(now));
 		}
-		
 		
 		System.out.println("-----------------------------");
 		System.out.println("DateTime FULL Style");

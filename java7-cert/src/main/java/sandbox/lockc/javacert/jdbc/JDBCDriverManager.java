@@ -32,9 +32,7 @@ public class JDBCDriverManager {
 		
 		PreparedStatement ps = conn.prepareStatement(
 				sql, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
-		
-		
-		
+				
 		ResultSet rs = ps.executeQuery();
 		while(rs.next()) {
 			System.out.println(rs.getInt(1));
