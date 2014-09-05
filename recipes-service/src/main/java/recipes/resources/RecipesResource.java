@@ -25,7 +25,7 @@ public class RecipesResource {
 	@GET
 	@Produces(MediaType.APPLICATION_XML)
 	public Response recipes() throws SerialisationException  {
-		Recipes recipes = delegate.recipesResource();
+		Recipes recipes = delegate.recipesResourceGet();
 		return Response.ok(serialiser.serialise(recipes), MediaType.APPLICATION_XML).build();
 	}
 }

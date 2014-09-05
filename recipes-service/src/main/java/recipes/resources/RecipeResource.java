@@ -1,6 +1,7 @@
 package recipes.resources;
 
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -25,8 +26,21 @@ public class RecipeResource {
 	
 	@GET
 	@Produces(MediaType.APPLICATION_XML)
-	public Response recipes(@PathParam("recipeId") int recipeId) throws SerialisationException  {
-		Recipe recipe = delegate.recipeResource(recipeId);
-		return Response.ok(serialiser.serialise(recipe), MediaType.APPLICATION_XML).build();
+	public Response getRecipe(@PathParam("recipeId") int recipeId) throws SerialisationException  {
+		Recipe recipe = delegate.recipeResourceGet(recipeId);
+		return Response.ok(recipe, MediaType.APPLICATION_XML).build();
+	}
+	
+	@POST
+	@Produces(MediaType.APPLICATION_XML)
+	public Response updateRecipe(@PathParam("recipeId") int recipeId,
+			Recipe recipe) throws SerialisationException  {
+		
+		if (recipeId != recipe.getRecipeId()) {
+			throw new RuntimeException("BadRequest!");
+		}
+		delegate.recipeResourcePost(recipe);
+		Recipe recipeResponse  = delegate.recipeResourceGet(recipeId);
+		return Response.ok(recipeResponse, MediaType.APPLICATION_XML).build();
 	}
 }
