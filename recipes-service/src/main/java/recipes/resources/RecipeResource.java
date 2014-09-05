@@ -11,8 +11,7 @@ import javax.ws.rs.core.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import recipes.domain.Recipe;
-import recipes.serialisation.SerialisationException;
-import recipes.serialisation.Serialiser;
+//import recipes.serialisation.Serialiser;
 import recipes.service.RecipeServiceDelegate;
 
 @Path("recipes/{recipeId}")
@@ -21,12 +20,12 @@ public class RecipeResource {
 	@Autowired(required=true)
 	private RecipeServiceDelegate delegate;
 	
-	@Autowired(required=true)
-	private Serialiser serialiser;
+//	@Autowired(required=true)
+//	private Serialiser serialiser;
 	
 	@GET
 	@Produces(MediaType.APPLICATION_XML)
-	public Response getRecipe(@PathParam("recipeId") int recipeId) throws SerialisationException  {
+	public Response getRecipe(@PathParam("recipeId") int recipeId) {
 		Recipe recipe = delegate.recipeResourceGet(recipeId);
 		return Response.ok(recipe, MediaType.APPLICATION_XML).build();
 	}
@@ -34,7 +33,7 @@ public class RecipeResource {
 	@POST
 	@Produces(MediaType.APPLICATION_XML)
 	public Response updateRecipe(@PathParam("recipeId") int recipeId,
-			Recipe recipe) throws SerialisationException  {
+			Recipe recipe) {
 		
 		if (recipeId != recipe.getRecipeId()) {
 			throw new RuntimeException("BadRequest!");
