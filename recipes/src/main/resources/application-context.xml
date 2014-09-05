@@ -15,7 +15,8 @@
     
     <bean id="transactionManager"
         class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-        <property name="dataSource" ref="dataSource" />
+        <!-- <property name="dataSource" ref="dataSource" /> -->
+        <property name="dataSource" ref="dataSourceMySql" />
     </bean>
     
     <bean id="recipeManager" class="recipes.tx.RecipeManagerImpl">
@@ -35,21 +36,9 @@
 		<property name="url" value="jdbc:sqlite:src/main/resources/recipes.db"/>
 	</bean>
 	
-	<!-- 
-		Hibernate Config
-	-->
-
-	<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean" >
-		<property name="dataSource" ref="dataSource"/>
-		<property name="packagesToScan" value="recipes.domain"/>
-		<property name="hibernateProperties">
-			<props>
-				<prop key="hibernate.dialect">recipes.dao.SQLiteDialect</prop>
-				<prop key="hibernate.show_sql">true</prop>
-				<prop key="hibernate.format_sql">true</prop>
-				<prop key="hibernate.current_session_context_class">thread</prop>
-			</props>
-		</property>
+	<bean id="dataSourceMySql" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+		<property name="url" value="jdbc:mysql://ec2-54-77-214-27.eu-west-1.compute.amazonaws.com/recipes_schema?user=root&amp;password=pa55word"/>
 	</bean>
 	
 	<!-- 
@@ -61,7 +50,8 @@
 	</bean>
 	
 	<bean id="jdbcDao" class="recipes.dao.RecipeSqliteJdbcDao">
-		<property name="dataSource" ref="dataSource"/>
+		<!-- <property name="dataSource" ref="dataSource"/> -->
+        <property name="dataSource" ref="dataSourceMySql" />
 	</bean>
 	
 	<bean id="xmlDao" class="recipes.dao.RecipeXmlDao">
@@ -75,6 +65,31 @@
 	<bean id="recipesWindow" class="recipes.gui.RecipesWindow" factory-method="newInstance">
 		<constructor-arg index="0" ref="recipeManager"/>
 	</bean>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <!-- 
+        Hibernate Config
+    -->
+
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean" >
+        <property name="dataSource" ref="dataSource"/>
+        <property name="packagesToScan" value="recipes.domain"/>
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">recipes.dao.SQLiteDialect</prop>
+                <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.format_sql">true</prop>
+                <prop key="hibernate.current_session_context_class">thread</prop>
+            </props>
+        </property>
+    </bean>
 	
 	
 </beans>

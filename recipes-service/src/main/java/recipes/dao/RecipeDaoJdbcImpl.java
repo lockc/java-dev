@@ -15,14 +15,19 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 
 import recipes.domain.Ingredient;
-import recipes.domain.Recipe;
 import recipes.domain.RecipeBook;
+import recipes.domain.Recipe;
 
-public class RecipeSqliteJdbcDao extends JdbcDaoSupport implements RecipeDao {
+public class RecipeDaoJdbcImpl extends JdbcDaoSupport implements RecipeDao {
 	
 	@Override
 	public List<Recipe> getAllRecipes() {
 		return doGetAllRecipes();
+	}
+	
+	@Override
+	public List<Recipe> getAllRecipesShallow() {
+		return doGetAllRecipesShallow();
 	}
 	
 	@Override
@@ -179,6 +184,35 @@ public class RecipeSqliteJdbcDao extends JdbcDaoSupport implements RecipeDao {
 					r.setIngredients(ingredients);
 					
 					
+					recipeList.add(r);
+				}
+				rs.close();
+				return recipeList;
+			}
+		});
+	}
+	
+	private List<Recipe> doGetAllRecipesShallow() {
+		return getJdbcTemplate().query(new PreparedStatementCreator() {
+			
+			@Override
+			public PreparedStatement createPreparedStatement(Connection con)
+					throws SQLException {
+				return con.prepareStatement("select r.id, r.name, r.recipe_book_id, r.page_no from recipes r");
+			}
+		},
+		new ResultSetExtractor<List<Recipe>>() {
+			
+			@Override
+			public List<Recipe> extractData(ResultSet rs) throws SQLException,
+					DataAccessException {
+				List<Recipe> recipeList = new ArrayList<>();
+				
+				while(rs.next()) {
+					Recipe r = new Recipe();
+					r.setRecipeId(rs.getInt(1));
+					r.setName(rs.getString(2));
+					r.setPageNumber(rs.getInt(4));
 					recipeList.add(r);
 				}
 				rs.close();

@@ -25,6 +25,11 @@ public class RecipeApp {
 	
 	public static void main(String[] args) throws Exception {
 		
+		
+		
+		
+		
+		
 		properties = new Properties();
 		properties.load(RecipeApp.class.getClassLoader().getResourceAsStream("settings.properties"));
 		PropertyConfigurator.configure("src/main/resources/settings.properties");
