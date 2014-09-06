@@ -13,18 +13,27 @@ public class RecipeServiceDelegate {
 	@Autowired(required=true)
 	private RecipeDao dao;
 	
-	public Recipes recipesResourceGet() {
+	public Recipes getRecipes() {
 		Recipes recipes = new Recipes();
 		recipes.setRecipes(dao.getAllRecipesShallow());
 		return recipes;
 	}
 
-	public Recipe recipeResourceGet(int recipeId) {
+	public Recipe getRecipe(int recipeId) {
 		return dao.getRecipe(recipeId);
 	}
 	
-	public void recipeResourcePost(Recipe recipe) {
+	public void postRecipe(Recipe recipe) {
 		dao.updateRecipe(recipe);
+	}
+	
+	public int putRecipe(Recipe recipe) {
+		return dao.addRecipe(recipe);
+	}
+	
+	public void deleteRecipe(int recipeId) {
+		Recipe recipe = dao.getRecipe(recipeId);
+		dao.deleteRecipe(recipe);
 	}
 	
 }

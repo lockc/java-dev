@@ -18,8 +18,8 @@ public class RecipeManagerImpl implements RecipeManager {
 
 	@Override
 	@Transactional
-	public void addRecipe(Recipe recipe) {
-		recipeDao.addRecipe(recipe);
+	public int addRecipe(Recipe recipe) {
+		return recipeDao.addRecipe(recipe);
 	}
 
 	@Override

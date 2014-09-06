@@ -52,11 +52,12 @@ public class RecipeDaoJdbcImpl extends JdbcDaoSupport implements RecipeDao {
 	} 
 
 	@Override
-	public void addRecipe(Recipe recipe) {
+	public int addRecipe(Recipe recipe) {
 		doInsertRecipe(recipe);
 		int recipeId = getRecipeId(recipe.getName());
 		recipe.setRecipeId(recipeId);
 		doInsertIngredients(recipe);
+		return recipeId;
 	}
 
 	@Override

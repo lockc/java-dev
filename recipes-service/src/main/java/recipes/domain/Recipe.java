@@ -12,7 +12,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import recipes.serialisation.IngredientAdaptor;
-import recipes.serialisation.RecipeBookAdaptor;
 
 @SuppressWarnings("serial")
 @XmlRootElement
@@ -25,7 +24,6 @@ public class Recipe implements Serializable {
 	@XmlElement(required = true)
 	private String name;
 
-	@XmlJavaTypeAdapter(value=RecipeBookAdaptor.class)
 	@XmlElement(name = "recipe-book")
 	private RecipeBook recipeBook;
 	
