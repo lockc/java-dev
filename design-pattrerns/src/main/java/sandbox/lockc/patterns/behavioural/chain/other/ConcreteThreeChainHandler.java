@@ -7,7 +7,7 @@ public class ConcreteThreeChainHandler implements ChainHandler
     public void handle(Request request)
     {
         System.out.println(this.getClass().getSimpleName());
-        
+        request.data = request.data + " " + this.getClass().getSimpleName(); 
         request.doChain();
     }
 

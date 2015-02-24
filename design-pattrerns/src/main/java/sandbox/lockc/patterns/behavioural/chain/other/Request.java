@@ -9,6 +9,8 @@ public class Request implements Chainable
         
     private short index = 0;
     
+    public String data = "";
+    
     @Override
     public void doChain() {
         if(chain.size() == index) {
@@ -17,5 +19,7 @@ public class Request implements Chainable
         }
         chain.get(index++).handle(this);
     }
+    
+    
 
 }

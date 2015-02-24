@@ -16,6 +16,8 @@ public class Client
         request.chain.add(chainHandler1);
         
         request.doChain();
+        
+        System.out.println("Data:" + request.data);
     }
 
 }
