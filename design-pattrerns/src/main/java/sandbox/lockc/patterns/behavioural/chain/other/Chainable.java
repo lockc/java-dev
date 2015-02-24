@@ -1,6 +1,6 @@
 package sandbox.lockc.patterns.behavioural.chain.other;
 
-public interface Chainable
-{
+public interface Chainable {
+    
     void doChain();
 }

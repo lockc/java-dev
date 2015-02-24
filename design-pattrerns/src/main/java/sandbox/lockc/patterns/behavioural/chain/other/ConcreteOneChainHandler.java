@@ -1,11 +1,10 @@
 package sandbox.lockc.patterns.behavioural.chain.other;
 
-public class ConcreteOneChainHandler implements ChainHandler
-{
-
+public class ConcreteOneChainHandler implements ChainHandler {
+    
     @Override
-    public void handle(Request request)
-    {
+    public void handle(Request request) {
+
         System.out.println(this.getClass().getSimpleName());
         request.data = request.data + " " + this.getClass().getSimpleName();
         request.doChain();
