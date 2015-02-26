@@ -10,14 +10,14 @@ package lockc.java8.lambda;
  * - a short lambda function syntax
  * - a constructor reference syntax.
  * 
- * What the constructor reference syntax is saying is create
- * a Switcher instance who's implementation creates a new
  * 
- * Declare a Switcher who's switchIt method takes a String and
- * returns a SomeClass, the the constructor reference syntax is
- * saying is create Switcher instance who's implementation creates
- * a new SomeClass and try an match a constructor signature of
- * a single String.
+ * What this does is declare a generic Switcher who's switchIt method
+ * takes a single String argument and returns a SomeClass based on the T
+ * and S type parameters. The constructor reference syntax is
+ * saying, create a Switcher instance who's implementation constructs
+ * a new SomeClass and try and match a constructor signature of
+ * SomeClass with a single String constructor based on the method
+ * signature of the functional interface.
  * 
  * @author lockc
  *
@@ -70,9 +70,9 @@ public class ConstructorReferencesExample3 {
         /**
          * These examples show constructor references in an even simpler
          * form, the Creator functional interface simply constructs
-         * new objects and returns them.  Here the Creator interface
-         * has a method that takes no argument, hence the compiler
-         * tries to match the no-arg constructor
+         * new objects and returns them. Here the Creator interface
+         * has a method that takes no arguments, hence the compiler
+         * tries to match the no-arg constructor of each object type.
          */
         
         Creator<Object> object = Object::new;
@@ -134,6 +134,8 @@ public class ConstructorReferencesExample3 {
          * because the compiler would complain.
          * 
          * <pre>
+         * 
+         * 
          * 
          * public &lt;T&gt; SomeClass(T value) {
          * 
