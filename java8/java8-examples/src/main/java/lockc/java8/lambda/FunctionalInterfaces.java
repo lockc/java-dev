@@ -1,8 +1,8 @@
-package lockc.java8;
+package lockc.java8.lambda;
 
 import java.util.Comparator;
 
-public class HelloLamby {
+public class FunctionalInterfaces {
 
 	public static void main(String[] args) {
 
@@ -37,6 +37,7 @@ public class HelloLamby {
 		 */
 		Thread t = new Thread(() -> {System.out.println("my runnable");});
 		t.run();
+		
 		
 	}
 
