@@ -1,13 +1,31 @@
 package lockc.java8.lambda;
 
+/**
+ * This example shows constructor references in the simplest form.
+ * 
+ * We define a Switcher in four ways:
+ * 
+ * - an anonymous class,
+ * - a lambda function syntax
+ * - a short lambda function syntax
+ * - a constructor reference syntax.
+ * 
+ * What the constructor reference syntax is saying is create
+ * a Switcher instance who's implementation creates a new
+ * 
+ * Declare a Switcher who's switchIt method takes a String and
+ * returns a SomeClass, the the constructor reference syntax is
+ * saying is create Switcher instance who's implementation creates
+ * a new SomeClass and try an match a constructor signature of
+ * a single String.
+ * 
+ * @author lockc
+ *
+ */
 public class ConstructorReferencesExample3 {
     
     public static void main(String[] args) {
     
-        /**
-         * This shows constructor references in the simplest form
-         */
-        
         // From this ...
         Switcher<String, SomeClass> switcher0 = new Switcher<String, SomeClass>() {
             
@@ -17,21 +35,25 @@ public class ConstructorReferencesExample3 {
                 return new SomeClass(it);
             }
         };
-        SomeClass sc0 = SomeClass.switchTo(switcher0, "hello");
+        SomeClass sc0 = SomeClass.switchTo(switcher0, "anonymous class");
         sc0.print();
         
         // To this ...
-        Switcher<String, SomeClass> switcher1 = (it) -> new SomeClass(it);
-        SomeClass sc1 = SomeClass.switchTo(switcher1, "hello");
+        Switcher<String, SomeClass> switcher1 = (it) -> {
+            return new SomeClass(it);
+        };
+        SomeClass sc1 = SomeClass.switchTo(switcher1, "lambda function synta");
         sc1.print();
         
-        Switcher<String, SomeClass> switcher2 = SomeClass::new;
-        SomeClass sc2 = SomeClass.switchTo(switcher2, "hello");
-        sc2.print();
+        // To this ...
+        Switcher<String, SomeClass> switcher9 = (it) -> new SomeClass(it);
+        SomeClass sc9 = SomeClass.switchTo(switcher9, "shorthand lambda function syntax");
+        sc9.print();
         
-        Switcher<String, String> switcher3 = String::new;
-        String str = SomeClass.switchTo(switcher3, "hello");
-        System.out.println(str.getClass().getName() + " : " + str);
+        // To this ...
+        Switcher<String, SomeClass> switcher2 = SomeClass::new;
+        SomeClass sc2 = SomeClass.switchTo(switcher2, "lambda constructor reference ");
+        sc2.print();
         
         /*
          * compiler error - String.class has no constructor that
@@ -39,18 +61,88 @@ public class ConstructorReferencesExample3 {
          */
         // Switcher<SomeClass, String> switcher4 = String::new;
         
+        // Just to show from String to String because the String class
+        // also has a constructor that takes a string
+        Switcher<String, String> switcher3 = String::new;
+        String s = SomeClass.switchTo(switcher3, "hello");
+        System.out.println(s.getClass().getName() + " : " + s);
+        
+        /**
+         * These examples show constructor references in an even simpler
+         * form, the Creator functional interface simply constructs
+         * new objects and returns them.  Here the Creator interface
+         * has a method that takes no argument, hence the compiler
+         * tries to match the no-arg constructor
+         */
+        
+        Creator<Object> object = Object::new;
+        Object obj = SomeClass.create(object);
+        System.out.println(obj.toString());
+        
+        Creator<String> string = String::new;
+        String str = SomeClass.create(string);
+        System.out.println(str.toString());
+        
+        Creator<SomeClass> someClass = SomeClass::new;
+        SomeClass sc = SomeClass.create(someClass);
+        System.out.println(sc.toString());
     }
     
+    /**
+     * 
+     * @author lockc
+     *
+     * @param <T> from type
+     * @param <S> to type
+     */
     @FunctionalInterface
     private static interface Switcher<T, S> {
         
+        /**
+         * A method that takes a T and converts it to an S
+         * 
+         * @param it
+         * @return the converted object
+         */
         S switchIt(T it);
     }
     
+    @FunctionalInterface
+    private static interface Creator<T> {
+        
+        T createIt();
+    }
+    
+    /**
+     * Some class that provides a static switchTo method to illustrate the examples
+     * 
+     * @author lockc
+     *
+     */
     private static class SomeClass {
         
         private String value;
         
+        public SomeClass() {
+        
+        }
+        
+        /**
+         * A generic constructor allows conversion from any type so the compiler
+         * doesn't complain it cannot find a constructor. We could just as well put
+         * the following but this would mean only String<i>s<i> could be converted
+         * because the compiler would complain.
+         * 
+         * <pre>
+         * 
+         * public &lt;T&gt; SomeClass(T value) {
+         * 
+         *     this.value = value.toString();
+         * }
+         * </pre>
+         * 
+         * @param value
+         */
         public <T> SomeClass(T value) {
         
             this.value = value.toString();
@@ -59,6 +151,11 @@ public class ConstructorReferencesExample3 {
         public static <T, S> S switchTo(Switcher<T, S> switcher, T t) {
         
             return switcher.switchIt(t);
+        }
+        
+        public static <T> T create(Creator<T> creator) {
+        
+            return creator.createIt();
         }
         
         public void print() {
