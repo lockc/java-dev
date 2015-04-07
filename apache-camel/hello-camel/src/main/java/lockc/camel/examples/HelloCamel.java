@@ -37,7 +37,9 @@ public class HelloCamel {
         // Add some configuration by hand ...
         context.addRoutes(new RouteBuilder() {
             public void configure() {
-                from("test-jms:queue:" + queueName).to("file://test").to("test-jms:topic:camel-end");
+                from("test-jms:queue:" + queueName)
+                .to("file://test")
+                .to("test-jms:topic:camel-end");
             }
         });
         
@@ -47,16 +49,7 @@ public class HelloCamel {
         // Now everything is set up - lets start the context
         context.start();
         
-        // Now send some test text to a component - for this case a JMS Queue
-        // The text get converted to JMS messages - and sent to the Queue
-        // test.queue
-        // The file component is listening for messages from the Queue
-        // test.queue, consumes
-        // them and stores them to disk. The content of each file will be the
-        // test we sent here.
-        // The listener on the file component gets notified when new files are
-        // found ... that's it!
-        
+        // Now send some test text to a component         
         for (int i = 0; i < 10; i++) {
             template.sendBody("test-jms:queue:" + queueName, "Test Message: " + i);
         }
