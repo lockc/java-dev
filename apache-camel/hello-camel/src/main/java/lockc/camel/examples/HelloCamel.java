@@ -26,7 +26,8 @@ public class HelloCamel {
          * 
          * http://localhost:8161/admin
          * 
-         * create a queue called 'camel-test'
+         *  - create a queue called 'camel-test'
+         *  - create a topic called 'camel-end'
          */
         ConnectionFactory connectionFactory = new ActiveMQConnectionFactory("tcp://localhost:61616");
         
@@ -36,7 +37,7 @@ public class HelloCamel {
         // Add some configuration by hand ...
         context.addRoutes(new RouteBuilder() {
             public void configure() {
-                from("test-jms:queue:" + queueName).to("file://test");
+                from("test-jms:queue:" + queueName).to("file://test").to("test-jms:topic:camel-end");
             }
         });
         
