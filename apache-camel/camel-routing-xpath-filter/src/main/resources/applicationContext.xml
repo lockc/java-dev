@@ -28,17 +28,5 @@
         <contextScan />
     </camelContext>
 
-
-    <camelContext id="camel5b" xmlns="http://camel.apache.org/schema/spring">
-        <route>
-            <from uri="test-jms:queue:camel-test" />
-            <pipeline>
-                <bean ref="myMessageProcessingBean" method="process"/>
-                <to uri="test-jms:topic:camel-end" />
-            </pipeline>
-        </route>
-    </camelContext>
-
-    <bean id="myMessageProcessingBean" class="lockc.camel.examples.MessageProcessor"/>
     
 </beans>

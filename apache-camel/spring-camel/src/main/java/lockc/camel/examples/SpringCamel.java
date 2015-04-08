@@ -14,13 +14,16 @@ import org.springframework.stereotype.Component;
  * 
  */
 @Component
-public class HelloCamel {
+public class SpringCamel {
     
-    private static final Logger LOG = Logger.getLogger(HelloCamel.class);
+    private static final Logger LOG = Logger.getLogger(SpringCamel.class);
     
     @Produce(uri = "test-jms:queue:camel-test")
     private MyProducer producer;
-    
+        
+    /*
+     * send 10 plain text messages
+     */
     public void doSomething() {
     
         for (int i = 0; i < 10; i++) {
@@ -30,11 +33,12 @@ public class HelloCamel {
         }
     }
     
+    
     public static void main(String[] args) throws Exception {
     
         ClassPathXmlApplicationContext springContext = new ClassPathXmlApplicationContext("applicationContext.xml");
         
-        HelloCamel helloCamel = springContext.getBean(HelloCamel.class);
+        SpringCamel helloCamel = springContext.getBean(SpringCamel.class);
         helloCamel.doSomething();
                 
         // wait a bit and then stop
