@@ -21,7 +21,7 @@ public class MyBlueprintTest extends CamelBlueprintTestSupport {
         getMockEndpoint("mock:a").expectedBodiesReceived("Hello World!");
  
         // send a message
-        template.sendBody("direct:start", "World");
+        template.sendBody("direct:start", "World!");
  
         // assert mocks
         assertMockEndpointsSatisfied();

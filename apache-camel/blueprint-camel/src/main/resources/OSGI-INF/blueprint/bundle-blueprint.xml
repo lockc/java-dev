@@ -19,8 +19,6 @@
             <to uri="mock:a" />
         </route>
         
-        
-        
     </camelContext>
 
 </blueprint>
