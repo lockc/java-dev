@@ -11,4 +11,5 @@ public interface MyProducer {
     
     @InOnly
     void sendMessage(String message);
+    
 }

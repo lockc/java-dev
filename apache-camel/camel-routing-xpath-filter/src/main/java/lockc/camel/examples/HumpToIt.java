@@ -21,6 +21,9 @@ public class HumpToIt {
     @Produce(uri = "test-jms:queue:content")
     private MyProducer producer;
     
+    @Produce(uri = "direct:starter-for-ten")
+    private MyProducer producerForTen;
+    
     /*
      * send 10 XML messages half of which are explicit content
      */
@@ -41,12 +44,24 @@ public class HumpToIt {
         }
     }
     
+    public void doSomethingElse() {
+        
+        String message = "1915de4517af462e8fd2f63c97227496";
+        LOG.info("Sending message: " + message);
+        producerForTen.sendMessage(message);
+        
+    }
+    
     public static void main(String[] args) throws Exception {
     
         ClassPathXmlApplicationContext springContext = new ClassPathXmlApplicationContext("applicationContext.xml");
         
         HumpToIt helloCamel = springContext.getBean(HumpToIt.class);
-        helloCamel.doSomething();
+//        helloCamel.doSomething();
+        
+        helloCamel.doSomethingElse();
+        
+        
         
                 
         // wait a bit and then stop
