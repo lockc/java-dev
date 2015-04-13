@@ -3,7 +3,6 @@ package lockc.camel.examples;
 import java.util.Calendar;
 
 import org.apache.camel.CamelContext;
-import org.apache.camel.Produce;
 import org.apache.camel.ProducerTemplate;
 import org.apache.log4j.Logger;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -12,8 +11,7 @@ import org.springframework.stereotype.Component;
 /**
  * http://camel.apache.org/spring.html
  * http://camel.apache.org/bean-integration.html
- * http://camel.apache.org/pojo-producing.html
- * http://camel.apache.org/using-exchange-pattern-annotations.html
+ * http://camel.apache.org/dozer.html
  * 
  */
 @Component

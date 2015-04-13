@@ -1,8 +1,6 @@
 package lockc.camel.examples;
 
-import java.io.Serializable;
-
-public class TypeA implements Serializable {
+public class TypeA {
     
     private String fieldA;
     private Integer fieldB;

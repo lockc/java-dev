@@ -1,9 +1,8 @@
 package lockc.camel.examples;
 
-import java.io.Serializable;
 import java.util.Date;
 
-public class TypeB implements Serializable {
+public class TypeB {
     
     private String fieldA;
     private long fieldB;

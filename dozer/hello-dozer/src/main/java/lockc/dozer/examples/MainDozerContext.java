@@ -4,12 +4,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import lockc.dozer.examples.converters.DateIntConverter;
 
 import org.apache.log4j.Logger;
-import org.dozer.CustomConverter;
 import org.dozer.DozerBeanMapper;
-import org.dozer.DozerConverter;
 
 /**
  * 
