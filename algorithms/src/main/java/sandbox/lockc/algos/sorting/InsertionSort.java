@@ -6,7 +6,7 @@ import java.util.Arrays;
 /**
  * An example implementation of an insertion sort algorithm.
  * 
- * @see Algorithms Unlocked by Thomas H. Corman. Page 35, Chapter 3.
+ * @see "Algorithms Unlocked by Thomas H. Corman. Page 35, Chapter 3."
  * 
  * @author lockc
  *
