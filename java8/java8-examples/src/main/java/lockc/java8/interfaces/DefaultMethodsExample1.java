@@ -1,4 +1,4 @@
-package lockc.java8.lambda;
+package lockc.java8.interfaces;
 
 public class DefaultMethodsExample1 {
     

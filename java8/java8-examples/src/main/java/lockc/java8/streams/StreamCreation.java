@@ -7,11 +7,14 @@
  */
 package lockc.java8.streams;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 /**
- * This example
+ * This class shows some examples of how to generate a stream
  *
  * @author clock
  */
@@ -21,6 +24,7 @@ public class StreamCreation {
         example1();
         example2();
         example3();
+        example4();
     }
 
     /**
@@ -48,6 +52,21 @@ public class StreamCreation {
         doSomethingWithStream(stream, 'o');
     }
 
+    /**
+     * Example using the {@link Collection#stream()} method
+     */
+    public static void example4() {
+        List<String> numbers = new ArrayList<>();
+        numbers.add("one");
+        numbers.add("two");
+        numbers.add("three");
+        numbers.add("four");
+
+        Stream<String> stream = numbers.stream();
+        doSomethingWithStream(stream, 'o');
+
+        numbers.spliterator();
+    }
 
     public static void doSomethingWithStream(Stream<?> stream, char c) {
 

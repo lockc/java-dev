@@ -19,7 +19,8 @@ public class ReferenceMethodsExample2 {
                 
             }
         });
-        
+        t.run();
+
         // to this ...
         t = new Thread(() -> {
             SomeClass.doSomethingStatic();
