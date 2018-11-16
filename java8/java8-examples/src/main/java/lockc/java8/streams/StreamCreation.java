@@ -1,6 +1,7 @@
 package lockc.java8.streams;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Supplier;
@@ -18,6 +19,7 @@ public class StreamCreation {
         example2();
         example3();
         example4();
+        example5();
     }
 
     /**
@@ -59,6 +61,12 @@ public class StreamCreation {
         doSomethingWithStream(stream, 'o');
 
         numbers.spliterator();
+    }
+
+    public static void example5() {
+        String[] strings = {"one", "two", "three", "four"};
+        Stream<Object> stream = Arrays.stream(strings);
+        doSomethingWithStream(stream, 'o');
     }
 
     public static void doSomethingWithStream(Stream<?> stream, char c) {
