@@ -1,30 +1,43 @@
 package lockc.java11.httpclient;
 
+import java.net.InetSocketAddress;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
 
+import com.sun.net.httpserver.HttpServer;
+
 /**
  *
  */
 public class HttpClientExample1 {
 
-	public static void main(String[] args) throws Exception {
+	public static void main( String[] args ) throws Exception {
 
-		HttpClient client = HttpClient.newBuilder().build();
+		HttpPingServer httpPingServer = new HttpPingServer();
 
-		HttpRequest httpRequest = HttpRequest.newBuilder()
-				.uri( URI.create( "http://bluebox:8080/queue-service/ping" ) )
-				.GET()
-				.build();
+		try {
+			httpPingServer.start();
 
-		HttpResponse<String> send = client.send( httpRequest, BodyHandlers.ofString() );
+			HttpClient client = HttpClient.newBuilder().build();
 
-		String body = send.body();
-		System.out.println( body );
+			HttpRequest httpRequest = HttpRequest.newBuilder()
+					.uri( URI.create( httpPingServer.getPingUrl() ) )
+					.GET()
+					.build();
 
+			HttpResponse<String> send = client.send( httpRequest, BodyHandlers.ofString() );
+
+			String body = send.body();
+			System.out.println( body );
+
+		} catch ( Exception e ) {
+			e.printStackTrace();
+		} finally {
+			httpPingServer.stop();
+		}
 	}
 
 }
